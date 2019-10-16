@@ -80,7 +80,7 @@ def postcss_gen_runner(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
-        visibility: The visibilty of the build rule.
+        visibility: The visibility of the build rule.
     """
 
     runner_src_name = "%s.runner_src" % name

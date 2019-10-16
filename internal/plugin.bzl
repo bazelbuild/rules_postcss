@@ -45,7 +45,7 @@ def postcss_plugin(
         srcs: JS sources for the Node.js module.
         data: Non-JS data files needed for the Node.js module.
         deps: Other Node.js module/plugin dependencies.
-        visibility: The visibilty of the build rule.
+        visibility: The visibility of the build rule.
     """
 
     native.filegroup(

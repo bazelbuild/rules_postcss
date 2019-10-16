@@ -31,7 +31,7 @@ def postcss_runner_bin(
         name: The name of the build rule.
         src: The source file and entry point of the nodejs_binary.
         deps: What the nodejs_binary depends on.
-        visibility: The visibilty of the build rule.
+        visibility: The visibility of the build rule.
     """
 
     nodejs_binary(
