@@ -89,6 +89,7 @@ def postcss_gen_runner(
     postcss_runner_src(
         name = runner_src_name,
         plugins = plugins,
+        map_annotation = map_annotation,
         template = "//internal:runner-template.js",
         visibility = ["//visibility:private"],
     )
