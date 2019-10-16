@@ -25,15 +25,14 @@ def autoprefixer(
     """Runs autoprefixer on the given source files located in the given fileset.
 
     Args:
-      name: A unique label for this rule.
-      src: Source file or target.
-      out: Output file.
-      browsers: Browers to target, in browserlist format (e.g., "last 1 version",
-                or "> 5%, > 2% in US, Firefox > 20").
-                See https://github.com/ai/browserslist for more queries. If empty
-                or blank, include all known prefixes. Default is '> 1%'.
-      visibility: Standard BUILD visibility.
-      compatible_with: Standard BUILD compatible_with.
+        name: A unique label for this rule.
+        src: Source file or target.
+        out: Output file.
+        browsers: Browers to target, in browserlist format (e.g., "last 1 version",
+                  or "> 5%, > 2% in US, Firefox > 20").
+                  See https://github.com/ai/browserslist for more queries. If empty
+                  or blank, include all known prefixes. Default is '> 1%'.
+        visibility: The visibility of the build rule.
     """
 
     postcss_binary(
