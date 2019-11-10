@@ -16,22 +16,22 @@ load("@bazel_tools//tools/build_rules:test_rules.bzl", "file_test")
 
 package(default_visibility = ["//visibility:private"])
 
-file_test(
-    name = "autoprefixer_test",
-    content = """body {
+AUTOPREFIXER_OUTPUT = """body {
   font: 42px 'Comic Sans MS';
   -webkit-box-flex: 42;
   -webkit-flex: 42 -42 auto;
       -ms-flex: 42 -42 auto;
           flex: 42 -42 auto;
 }
-""",
+"""
+
+file_test(
+    name = "autoprefixer_test",
+    content = AUTOPREFIXER_OUTPUT,
     file = "//examples/autoprefixer:style_processed.css",
 )
 
-file_test(
-    name = "custom_plugin_test",
-    content = """@media screen and (max-width: 42px) {
+CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: 42px) {
   body {
     font: 42px "Comic Sans MS";
     -webkit-box-flex: 42;
@@ -42,6 +42,16 @@ file_test(
 }
 
 /*# sourceMappingURL=style.css.map */
-""",
+"""
+
+file_test(
+    name = "custom_plugin_test",
+    content = CUSTOM_PLUGIN_OUTPUT,
     file = "//examples/custom_plugin:style_processed.css",
+)
+
+file_test(
+    name = "custom_plugin_ts_test",
+    content = CUSTOM_PLUGIN_OUTPUT,
+    file = "//examples/custom_plugin_ts:style_processed.css",
 )
