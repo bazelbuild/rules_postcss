@@ -26,7 +26,6 @@ ts_library(
     deps = [
       "@npm//@types",
       "@npm//postcss",
-      "@npm//typescript",
     ],
 )
 
