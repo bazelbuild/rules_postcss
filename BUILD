@@ -13,3 +13,5 @@
 # limitations under the License.
 
 exports_files(["LICENSE"])
+
+exports_files(["tsconfig.json"], visibility = ["//visibility:public"])
