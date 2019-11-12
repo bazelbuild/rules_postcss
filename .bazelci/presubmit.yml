@@ -1,4 +1,6 @@
 ---
+buildifier:
+  version: latest
 platforms:
   ubuntu1604:
     build_targets:
