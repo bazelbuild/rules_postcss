@@ -23,7 +23,7 @@ rules_sass_dependencies()
 load("@io_bazel_rules_sass//:defs.bzl", "sass_repositories")
 sass_repositories()
 
-load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories", "yarn_install")
+load("@build_bazel_rules_nodejs//:defs.bzl", "yarn_install")
 
 yarn_install(
     name = "npm",
