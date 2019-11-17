@@ -12,17 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Public API surface is re-exported here.
+load("//:defs.bzl", "rtlcss")
 
-Users should not load files under "/internal"
-"""
+package(default_visibility = ["//tests:__subpackages__"])
 
-load("//internal:plugin.bzl", _postcss_plugin = "postcss_plugin")
-load("//internal:binary.bzl", _postcss_binary = "postcss_binary")
-load("//internal/autoprefixer:build_defs.bzl", _autoprefixer = "autoprefixer")
-load("//internal/rtlcss:build_defs.bzl", _rtlcss = "rtlcss")
-
-postcss_plugin = _postcss_plugin
-postcss_binary = _postcss_binary
-autoprefixer = _autoprefixer
-rtlcss = _rtlcss
+rtlcss(
+    name = "rtlcss",
+    src = "style.css",
+    out = "style_processed.css",
+)
