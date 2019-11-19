@@ -31,6 +31,20 @@ file_test(
     file = "//examples/autoprefixer:style_processed.css",
 )
 
+RTLCSS_OUTPUT = """body {
+  direction: rtl;
+  margin: 5px 25px 20px 10px;
+  padding: 4px 16px 12px 8px;
+  border-width: 1px 4px 3px 2px;
+}
+"""
+
+file_test(
+    name = "rtlcss_test",
+    content = RTLCSS_OUTPUT,
+    file = "//examples/rtlcss:style_processed.css",
+)
+
 CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: 42px) {
   body {
     font: 42px "Comic Sans MS";
