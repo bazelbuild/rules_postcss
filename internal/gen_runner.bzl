@@ -54,6 +54,10 @@ postcss_runner_src = rule(
             allow_single_file = [".js"],
             mandatory = True,
         ),
+        "data": attr.label_list(
+            allow_files = True,
+            mandatory = False,
+        ),
     },
     outputs = {
         "postcss_runner_src": "%{name}.js",
@@ -65,6 +69,7 @@ def postcss_gen_runner(
         plugins,
         deps,
         map_annotation,
+        data = [],
         visibility = None):
     """Generates a PostCSS runner binary.
 
@@ -80,6 +85,7 @@ def postcss_gen_runner(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
+        data: Foo
         visibility: The visibility of the build rule.
     """
 
@@ -89,6 +95,7 @@ def postcss_gen_runner(
         name = runner_src_name,
         plugins = plugins,
         map_annotation = map_annotation,
+        data = data,
         template = "//internal:runner-template.js",
         visibility = ["//visibility:private"],
     )
@@ -100,5 +107,6 @@ def postcss_gen_runner(
             "@npm//minimist",
             "@npm//postcss",
         ] + deps,
+        data = data,
         visibility = visibility,
     )

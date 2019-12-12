@@ -49,9 +49,9 @@ const options = {
 
 // Change to the bin directory so that plugins that emit files can do so
 // relative to the output root of the workspace.
-const cwd = process.cwd();
-const newDir = path.join(cwd, binDir);
-process.chdir(newDir);
+//const cwd = process.cwd();
+//const newDir = path.join(cwd, binDir);
+//process.chdir(newDir);
 
 postcss(TEMPLATED_plugins)
     .process(cssString, options)
@@ -59,7 +59,7 @@ postcss(TEMPLATED_plugins)
         result => {
           // Change back to the original cwd, because the .css and .css.map
           // output paths were supplied relative to it.
-          process.chdir(cwd);
+          //process.chdir(cwd);
 
           fs.writeFileSync(args.outCssFile, result.css);
           if (result.map) {

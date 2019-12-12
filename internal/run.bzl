@@ -55,7 +55,7 @@ def _postcss_run_impl(ctx):
         args.append("--cssMapFile=%s" % css_map_file.path)
 
     # The command may only access files declared in inputs.
-    inputs = [css_file] + ([css_map_file] if css_map_file else [])
+    inputs = [css_file] + ([css_map_file] if css_map_file else []) + (ctx.files.data if ctx.files.data else [])
 
     ctx.actions.run(
         outputs = [ctx.outputs.css_file, ctx.outputs.css_map_file] + ctx.outputs.additional_outputs,
@@ -65,11 +65,11 @@ def _postcss_run_impl(ctx):
         progress_message = "Running PostCSS runner on %s" % ctx.attr.src.label,
     )
 
-def _postcss_run_outputs(output_name):
-    output_name = output_name or "%{name}.css"
-    return {
-        "css_file": output_name,
-        "css_map_file": "%s.map" % output_name,
+def _postcss_run_outputs(output_name):	
+    output_name = output_name or "%{name}.css"	
+    return {	
+        "css_file": output_name,	
+        "css_map_file": "%s.map" % output_name,	
     }
 
 postcss_run = rule(
@@ -80,6 +80,10 @@ postcss_run = rule(
             mandatory = True,
         ),
         "output_name": attr.string(default = ""),
+        "data": attr.label_list(
+            allow_files = True,
+            mandatory = False,
+        ),
         "additional_outputs": attr.output_list(),
         "runner": attr.label(
             executable = True,
