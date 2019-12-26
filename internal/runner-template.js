@@ -22,9 +22,11 @@
 
 const fs = require('fs');
 const minimist = require('minimist');
+const path = require('path');
 const postcss = require('postcss');
 
 const args = minimist(process.argv.slice(2));
+const binDir = args.binDir;
 const cssString = fs.readFileSync(args.cssFile, 'utf8');
 const cssMapString =
     args.cssMapFile ? fs.readFileSync(args.cssMapFile, 'utf8') : null;
@@ -45,10 +47,20 @@ const options = {
   }
 };
 
+// Change to the bin directory so that plugins that emit files can do so
+// relative to the output root of the workspace.
+const cwd = process.cwd();
+const newDir = path.join(cwd, binDir);
+process.chdir(newDir);
+
 postcss(TEMPLATED_plugins)
     .process(cssString, options)
     .then(
         result => {
+          // Change back to the original cwd, because the .css and .css.map
+          // output paths were supplied relative to it.
+          process.chdir(cwd);
+
           fs.writeFileSync(args.outCssFile, result.css);
           if (result.map) {
             fs.writeFileSync(args.outCssMapFile, result.map);

@@ -46,6 +46,7 @@ def _postcss_run_impl(ctx):
 
     # Generate the command line.
     args = [
+        "--binDir=%s" % ctx.bin_dir.path,
         "--cssFile=%s" % css_file.path,
         "--outCssFile=%s" % ctx.outputs.css_file.path,
         "--outCssMapFile=%s" % ctx.outputs.css_map_file.path,
@@ -57,7 +58,7 @@ def _postcss_run_impl(ctx):
     inputs = [css_file] + ([css_map_file] if css_map_file else [])
 
     ctx.actions.run(
-        outputs = [ctx.outputs.css_file, ctx.outputs.css_map_file],
+        outputs = [ctx.outputs.css_file, ctx.outputs.css_map_file] + ctx.outputs.additional_outputs,
         inputs = inputs,
         executable = ctx.executable.runner,
         arguments = args,
@@ -79,6 +80,7 @@ postcss_run = rule(
             mandatory = True,
         ),
         "output_name": attr.string(default = ""),
+        "additional_outputs": attr.output_list(),
         "runner": attr.label(
             executable = True,
             cfg = "host",
