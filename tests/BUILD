@@ -69,3 +69,16 @@ file_test(
     content = CUSTOM_PLUGIN_OUTPUT,
     file = "//examples/custom_plugin_ts:style_processed.css",
 )
+
+ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
+
+- body (1 total)
+- .container (2 total)
+- .image.full-width (2 total)
+- .image (1 total)"""
+
+file_test(
+    name = "additional_outputs_test",
+    content = ADDITIONAL_OUTPUT,
+    file = "//examples/additional_outputs:selectors.md",
+)
