@@ -26,7 +26,9 @@ const path = require('path');
 const postcss = require('postcss');
 
 const args = minimist(process.argv.slice(2));
+const cwd = process.cwd();
 const binDir = args.binDir;
+
 const cssString = fs.readFileSync(args.cssFile, 'utf8');
 const cssMapString =
     args.cssMapFile ? fs.readFileSync(args.cssMapFile, 'utf8') : null;
@@ -47,23 +49,22 @@ const options = {
   }
 };
 
+// Get absolute output paths before we change directory.
+const outCssPath = path.join(cwd, args.outCssFile);
+const outCssMapPath = args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
+
 // Change to the bin directory so that plugins that emit files can do so
 // relative to the output root of the workspace.
-const cwd = process.cwd();
-const newDir = path.join(cwd, binDir);
-process.chdir(newDir);
+const binPath = path.join(cwd, binDir);
+process.chdir(binPath);
 
 postcss(TEMPLATED_plugins)
     .process(cssString, options)
     .then(
         result => {
-          // Change back to the original cwd, because the .css and .css.map
-          // output paths were supplied relative to it.
-          process.chdir(cwd);
-
-          fs.writeFileSync(args.outCssFile, result.css);
+          fs.writeFileSync(outCssPath, result.css);
           if (result.map) {
-            fs.writeFileSync(args.outCssMapFile, result.map);
+            fs.writeFileSync(outCssMapPath, result.map);
           }
         },
         e => {
