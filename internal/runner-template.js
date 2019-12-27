@@ -51,7 +51,8 @@ const options = {
 
 // Get absolute output paths before we change directory.
 const outCssPath = path.join(cwd, args.outCssFile);
-const outCssMapPath = args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
+const outCssMapPath =
+    args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
 
 // Change to the bin directory so that plugins that emit files can do so
 // relative to the output root of the workspace.
