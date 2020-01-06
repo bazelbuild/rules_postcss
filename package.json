@@ -24,7 +24,7 @@
         "typescript": "^3.7.2"
     },
     "devDependencies": {
-        "@bazel/typescript": "^0.39.1"
+        "@bazel/typescript": "^1.0.1"
     },
     "bazelWorkspaces": {
         "build_bazel_rules_postcss": {
