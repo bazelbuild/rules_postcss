@@ -18,7 +18,7 @@ Creates a nodejs_binary given our generated internal runner source. This file
 can be substituted in your copies of these build rules, for example due to
 differences in Node.js/Starlark build rules."""
 
-load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 
 def postcss_runner_bin(
         name,
