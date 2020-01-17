@@ -35,9 +35,6 @@ def rtlcss(
         plugins = {
             "//internal/rtlcss:rtlcss": "",
         },
-        deps = [
-            "@npm//rtlcss",
-        ],
         src = src,
         output_name = out,
         **kwargs

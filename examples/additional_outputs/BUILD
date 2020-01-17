@@ -31,7 +31,4 @@ postcss_binary(
         ":list_selectors": "[{markdownDir: 'examples/additional_outputs'}]",
     },
     additional_outputs = ["selectors.md"],
-    deps = [
-        ":list_selectors",
-    ],
 )

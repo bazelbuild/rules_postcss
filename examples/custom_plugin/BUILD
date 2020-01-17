@@ -21,6 +21,9 @@ AUTO_PREFIXER_BROWSERS = "ie >= 9, edge >= 12, firefox >= 42, chrome >= 32, safa
 
 postcss_plugin(
     name = "autoprefixer",
+    deps = [
+        "@npm//autoprefixer",
+    ],
     node_require = "autoprefixer",
 )
 
@@ -45,8 +48,4 @@ postcss_binary(
         ":autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,
         ":unquote": "",
     },
-    deps = [
-        ":unquote",
-        "@npm//autoprefixer",
-    ],
 )
