@@ -75,3 +75,9 @@ def postcss_plugin(
         node_require = node_require,
         **kwargs
     )
+
+    postcss_plugin_info(
+        name = "%s.info" % name,
+        node_require = node_require,
+        visibility = visibility,
+    )
