@@ -33,7 +33,7 @@ def rtlcss(
     postcss_binary(
         name = name,
         plugins = {
-            "rtlcss": "",
+            "//internal/rtlcss:rtlcss": "",
         },
         deps = [
             "@npm//rtlcss",

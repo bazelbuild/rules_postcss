@@ -20,7 +20,13 @@ package(default_visibility = ["//tests:__subpackages__"])
 AUTO_PREFIXER_BROWSERS = "ie >= 9, edge >= 12, firefox >= 42, chrome >= 32, safari >= 8, opera >= 38, ios_saf >= 9.2, android >= 4.3, and_uc >= 9.9"
 
 postcss_plugin(
+    name = "autoprefixer",
+    node_require = "autoprefixer",
+)
+
+postcss_plugin(
     name = "unquote",
+    node_require = "build_bazel_rules_postcss/examples/custom_plugin/unquote.js",
     srcs = [
         "unquote.js",
     ],
@@ -36,8 +42,8 @@ postcss_binary(
     name = "style_processed",
     src = ":style",
     plugins = {
-        "autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,
-        "build_bazel_rules_postcss/examples/custom_plugin/unquote.js": "",
+        ":autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,
+        ":unquote": "",
     },
     deps = [
         ":unquote",

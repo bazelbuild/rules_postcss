@@ -19,9 +19,25 @@ Node.js source files, as well as promoting reuse of plugins across multiple
 postcss_binary targets.
 """
 
+PostcssPluginInfo = provider(fields=["node_require"])
+
+def _postcss_plugin_info_impl(ctx):
+    return [PostcssPluginInfo(node_require=ctx.attr.node_require)]
+
+postcss_plugin_info = rule(
+    implementation = _postcss_plugin_info_impl,
+    attrs = {
+        "node_require": attr.string(
+            default = "",
+            mandatory = True,
+        ),
+    },
+)
+
 def postcss_plugin(
         name,
-        srcs,
+        srcs = [],
+        node_require = "",
         data = [],
         deps = [],
         visibility = None):
@@ -43,6 +59,7 @@ def postcss_plugin(
     Args:
         name: The name of the build rule.
         srcs: JS sources for the Node.js module.
+        node_require: The require for the Node.js module.
         data: Non-JS data files needed for the Node.js module.
         deps: Other Node.js module/plugin dependencies.
         visibility: The visibility of the build rule.
@@ -51,5 +68,11 @@ def postcss_plugin(
     native.filegroup(
         name = name,
         srcs = srcs + data + deps,
+        visibility = visibility,
+    )
+
+    postcss_plugin_info(
+        name = "%s.info" % name,
+        node_require = node_require,
         visibility = visibility,
     )
