@@ -84,22 +84,10 @@ def postcss_plugin(
         **kwargs: Standard BUILD arguments to pass.
     """
 
-    native.filegroup(
+    postcss_plugin_info(
         name = name,
-        srcs = srcs + data + deps,
-        **kwargs
-    )
-
-    postcss_plugin_info(
-        name = "%s.info" % name,
-        node_require = node_require,
-        **kwargs
-    )
-
-    postcss_plugin_info(
-        name = "%s.info" % name,
         node_require = node_require,
         srcs = srcs,
         deps = deps,
-        visibility = visibility,
+        **kwargs
     )

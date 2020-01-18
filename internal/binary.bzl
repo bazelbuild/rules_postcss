@@ -54,17 +54,10 @@ def postcss_binary(
 
     runner_name = "%s.postcss_runner" % name
 
-    plugin_infos = []
-    plugins_keyed_by_infos = {}
-    for key, value in plugins.items():
-        plugin_info = "%s.info" % key
-        plugin_infos.append(plugin_info)
-        plugins_keyed_by_infos[plugin_info] = value
-
     postcss_gen_runner(
         name = runner_name,
-        plugins = plugins_keyed_by_infos,
-        deps = deps + plugin_infos,
+        plugins = plugins,
+        deps = deps + plugins.keys(),
         map_annotation = map_annotation,
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
