@@ -21,7 +21,8 @@ def autoprefixer(
         src,
         out,
         browsers = "> 1%",
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Runs autoprefixer on the given source files located in the given fileset.
 
     Args:
@@ -33,6 +34,7 @@ def autoprefixer(
                   See https://github.com/ai/browserslist for more queries. If empty
                   or blank, include all known prefixes. Default is '> 1%'.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     postcss_binary(
@@ -46,4 +48,5 @@ def autoprefixer(
         src = src,
         output_name = out,
         visibility = visibility,
+        compatible_with = compatible_with,
     )

@@ -20,7 +20,8 @@ def rtlcss(
         name,
         src,
         out,
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Runs rtlcss on the given source files located in the given fileset.
 
     Args:
@@ -28,6 +29,7 @@ def rtlcss(
         src: Source file or target.
         out: Output file.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     postcss_binary(
@@ -41,4 +43,5 @@ def rtlcss(
         src = src,
         output_name = out,
         visibility = visibility,
+        compatible_with = compatible_with,
     )

@@ -24,7 +24,8 @@ def postcss_runner_bin(
         name,
         src,
         deps,
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Convenience helper for using nodejs_binary with the PostCSS runner.
 
     Args:
@@ -32,6 +33,7 @@ def postcss_runner_bin(
         src: The source file and entry point of the nodejs_binary.
         deps: What the nodejs_binary depends on.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     nodejs_binary(
@@ -39,4 +41,5 @@ def postcss_runner_bin(
         entry_point = ":%s" % (src),
         data = deps,
         visibility = visibility,
+        compatible_with = compatible_with,
     )

@@ -30,7 +30,8 @@ def postcss_binary(
         additional_outputs = [],
         output_name = "",
         map_annotation = False,
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Runs PostCSS.
 
     Args:
@@ -49,6 +50,7 @@ def postcss_binary(
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     runner_name = "%s.postcss_runner" % name
@@ -63,6 +65,7 @@ def postcss_binary(
         deps = deps,
         map_annotation = map_annotation,
         visibility = ["//visibility:private"],
+        compatible_with = compatible_with,
     )
 
     postcss_run(
@@ -72,4 +75,5 @@ def postcss_binary(
         additional_outputs = additional_outputs,
         runner = runner_name,
         visibility = visibility,
+        compatible_with = compatible_with,
     )

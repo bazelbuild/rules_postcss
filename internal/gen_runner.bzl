@@ -67,7 +67,8 @@ def postcss_gen_runner(
         plugins,
         deps,
         map_annotation,
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Generates a PostCSS runner binary.
 
     Pass the result to a postcss_run rule to apply the runner to a css file.
@@ -83,6 +84,7 @@ def postcss_gen_runner(
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     runner_src_name = "%s.runner_src" % name
@@ -93,6 +95,7 @@ def postcss_gen_runner(
         map_annotation = map_annotation,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
         visibility = ["//visibility:private"],
+        compatible_with = compatible_with,
     )
 
     postcss_runner_bin(
@@ -103,4 +106,5 @@ def postcss_gen_runner(
             "@npm//postcss",
         ] + deps,
         visibility = visibility,
+        compatible_with = compatible_with,
     )

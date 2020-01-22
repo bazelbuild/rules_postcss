@@ -46,7 +46,8 @@ def postcss_plugin(
         srcs = [],
         data = [],
         deps = [],
-        visibility = None):
+        visibility = None,
+        compatible_with = None):
     """Represents a Node.js module that is a PostCSS plugin.
 
     This provides extra metadata about PostCSS plugins that will be consumed by
@@ -62,12 +63,14 @@ def postcss_plugin(
         data: Non-JS data files needed for the Node.js module.
         deps: Node.js module dependencies.
         visibility: The visibility of the build rule.
+        compatible_with: Standard BUILD compatible_with.
     """
 
     native.filegroup(
         name = name,
         srcs = srcs + data + deps,
         visibility = visibility,
+        compatible_with = compatible_with,
     )
 
     postcss_plugin_info(
