@@ -18,6 +18,7 @@ This generates the internal PostCSS runner as a nodejs_binary, that can later
 be used as an executable."""
 
 load(":runner_bin.bzl", "postcss_runner_bin")
+load(":plugin.bzl", "PostcssPluginInfo")
 
 ERROR_INPUT_NO_PLUGINS = "No plugins were provided"
 
@@ -27,8 +28,9 @@ def _postcss_runner_src_impl(ctx):
 
     plugins = []
     for plugin_key, plugin_options in ctx.attr.plugins.items():
+        node_require = plugin_key[PostcssPluginInfo].node_require
         plugins.append("require('%s').apply(this, %s)" %
-                       (plugin_key, plugin_options if plugin_options else "[]"))
+                       (node_require, plugin_options if plugin_options else "[]"))
 
     ctx.actions.expand_template(
         template = ctx.file.template,
@@ -44,7 +46,7 @@ def _postcss_runner_src_impl(ctx):
 postcss_runner_src = rule(
     implementation = _postcss_runner_src_impl,
     attrs = {
-        "plugins": attr.string_dict(
+        "plugins": attr.label_keyed_string_dict(
             mandatory = True,
         ),
         "map_annotation": attr.bool(

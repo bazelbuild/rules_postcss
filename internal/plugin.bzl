@@ -19,37 +19,59 @@ Node.js source files, as well as promoting reuse of plugins across multiple
 postcss_binary targets.
 """
 
+PostcssPluginInfo = provider(fields=["node_require"])
+
+def _postcss_plugin_info_impl(ctx):
+    return [PostcssPluginInfo(node_require=ctx.attr.node_require)]
+
+postcss_plugin_info = rule(
+    implementation = _postcss_plugin_info_impl,
+    attrs = {
+        "node_require": attr.string(
+            default = "",
+            doc = """The Node.js require path for this plugin, following the
+format expected by the Node.js build rules.""",
+            mandatory = True,
+        ),
+    },
+    doc = """Metadata about a PostCSS plugin.
+
+This rule provides extra metadata about this PostCSS plugin required when using
+postcss_binary."""
+)
+
 def postcss_plugin(
         name,
-        srcs,
+        node_require,
+        srcs = [],
         data = [],
         deps = [],
         visibility = None):
     """Represents a Node.js module that is a PostCSS plugin.
 
-    It is strongly recommended to use postcss_plugin to define PostCSS plugins
-    as available targets, in lieu of nodejs_module.
+    This provides extra metadata about PostCSS plugins that will be consumed by
+    postcss_binary.
 
-    For forward compatibility purposes, although postcss_plugin is currently
-    equivalent to defining a filegroup with arbitrary grouping, PostCSS plugins
-    should be defined using postcss_plugin. This file can be substituted in
-    internal copies of these build rules, which can make use of the extra
-    grouping information.
-
-    In the future, postcss_plugin targets are intended to provide extra
-    information to postcss_binary rules. As such, using unsupported build rules
-    to represent PostCSS plugins may lead to breakages in the future.
+    For plugins that are from npm, adding the module as a dep is sufficient.
+    For plugins that are from local sources, the sources must be added to srcs.
 
     Args:
         name: The name of the build rule.
-        srcs: JS sources for the Node.js module.
+        node_require: The require for the Node.js module.
+        srcs: JS sources for the Node.js module, if any.
         data: Non-JS data files needed for the Node.js module.
-        deps: Other Node.js module/plugin dependencies.
+        deps: Node.js module dependencies.
         visibility: The visibility of the build rule.
     """
 
     native.filegroup(
         name = name,
         srcs = srcs + data + deps,
+        visibility = visibility,
+    )
+
+    postcss_plugin_info(
+        name = "%s.info" % name,
+        node_require = node_require,
         visibility = visibility,
     )

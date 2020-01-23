@@ -53,9 +53,13 @@ def postcss_binary(
 
     runner_name = "%s.postcss_runner" % name
 
+    plugins_keyed_by_infos = {}
+    for key, value in plugins.items():
+        plugins_keyed_by_infos["%s.info" % key] = value
+
     postcss_gen_runner(
         name = runner_name,
-        plugins = plugins,
+        plugins = plugins_keyed_by_infos,
         deps = deps,
         map_annotation = map_annotation,
         visibility = ["//visibility:private"],
