@@ -12,6 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+bzl_library(
+    name = "build_defs",
+    srcs = ["defs.bzl"],
+    deps = [
+        "//internal:build_defs",
+        "//internal/autoprefixer:build_defs",
+        "//internal/rtlcss:build_defs",
+    ],
+)
+
 exports_files(["LICENSE"])
 
 exports_files(["tsconfig.json"], visibility = ["//visibility:public"])
