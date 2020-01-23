@@ -12,7 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//internal:plugin.bzl", "postcss_plugin")
+
+bzl_library(
+    name = "build_defs",
+    srcs = glob(["*.bzl"]),
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal:build_defs",
+    ],
+)
 
 postcss_plugin(
     name = "rtlcss",

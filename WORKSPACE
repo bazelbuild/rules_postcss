@@ -6,6 +6,9 @@ workspace(
 load("//:package.bzl", "rules_postcss_dependencies")
 rules_postcss_dependencies()
 
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+bazel_skylib_workspace()
+
 load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
 yarn_install(
     name = "npm",
