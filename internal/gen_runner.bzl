@@ -88,10 +88,9 @@ def postcss_gen_runner(
     runner_src_name = "%s.runner_src" % name
 
     kwargs_always_private = dict()
-    for (key, value) in kwargs:
-        if key == "visibility":
-            value = "//visibility:private"
+    for (key, value) in kwargs.items():
         kwargs_always_private[key] = value
+    kwargs_always_private.setdefault("visibility", ["//visibility:private"])
 
     postcss_runner_src(
         name = runner_src_name,
