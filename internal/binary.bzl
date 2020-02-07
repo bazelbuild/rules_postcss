@@ -19,6 +19,7 @@ it using a provided list of PostCSS plugins, against input .css (and optionally
 .css.map).
 """
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":gen_runner.bzl", "postcss_gen_runner")
 load(":run.bzl", "postcss_run")
 
@@ -62,8 +63,7 @@ def postcss_binary(
         plugins = plugins_keyed_by_infos,
         deps = deps,
         map_annotation = map_annotation,
-        visibility = ["//visibility:private"],
-        **{k: kwargs.get(k) for k in kwargs if k not in ["visibility"]}
+        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
     postcss_run(

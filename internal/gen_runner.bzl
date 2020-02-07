@@ -17,6 +17,7 @@
 This generates the internal PostCSS runner as a nodejs_binary, that can later
 be used as an executable."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
 load(":plugin.bzl", "PostcssPluginInfo")
 
@@ -92,8 +93,7 @@ def postcss_gen_runner(
         plugins = plugins,
         map_annotation = map_annotation,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
-        visibility = ["//visibility:private"],
-        **{k: kwargs.get(k) for k in kwargs if k not in ["visibility"]}
+        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
     postcss_runner_bin(
