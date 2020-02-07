@@ -57,17 +57,13 @@ def postcss_binary(
     for key, value in plugins.items():
         plugins_keyed_by_infos["%s.info" % key] = value
 
-    kwargs_always_private = dict()
-    for (key, value) in kwargs.items():
-        kwargs_always_private[key] = value
-    kwargs_always_private.setdefault("visibility", ["//visibility:private"])
-
     postcss_gen_runner(
         name = runner_name,
         plugins = plugins_keyed_by_infos,
         deps = deps,
         map_annotation = map_annotation,
-        **kwargs_always_private
+        visibility = ["//visibility:private"],
+        **{k: kwargs.get(k) for k in kwargs if k not in ["visibility"]}
     )
 
     postcss_run(

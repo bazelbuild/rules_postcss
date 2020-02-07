@@ -87,17 +87,13 @@ def postcss_gen_runner(
 
     runner_src_name = "%s.runner_src" % name
 
-    kwargs_always_private = dict()
-    for (key, value) in kwargs.items():
-        kwargs_always_private[key] = value
-    kwargs_always_private.setdefault("visibility", ["//visibility:private"])
-
     postcss_runner_src(
         name = runner_src_name,
         plugins = plugins,
         map_annotation = map_annotation,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
-        **kwargs_always_private
+        visibility = ["//visibility:private"],
+        **{k: kwargs.get(k) for k in kwargs if k not in ["visibility"]}
     )
 
     postcss_runner_bin(
