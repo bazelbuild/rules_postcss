@@ -30,8 +30,7 @@ def postcss_binary(
         additional_outputs = [],
         output_name = "",
         map_annotation = False,
-        visibility = None,
-        compatible_with = None):
+        **kwargs):
     """Runs PostCSS.
 
     Args:
@@ -49,8 +48,7 @@ def postcss_binary(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
-        visibility: The visibility of the build rule.
-        compatible_with: Standard BUILD compatible_with.
+        **kwargs: Standard BUILD arguments to pass.
     """
 
     runner_name = "%s.postcss_runner" % name
@@ -59,13 +57,18 @@ def postcss_binary(
     for key, value in plugins.items():
         plugins_keyed_by_infos["%s.info" % key] = value
 
+    kwargs_always_private = dict()
+    for (key, value) in kwargs:
+        if key == "visibility":
+            value = "//visibility:private"
+        kwargs_always_private[key] = value
+
     postcss_gen_runner(
         name = runner_name,
         plugins = plugins_keyed_by_infos,
         deps = deps,
         map_annotation = map_annotation,
-        visibility = ["//visibility:private"],
-        compatible_with = compatible_with,
+        **kwargs_always_private
     )
 
     postcss_run(
@@ -74,6 +77,5 @@ def postcss_binary(
         output_name = output_name,
         additional_outputs = additional_outputs,
         runner = runner_name,
-        visibility = visibility,
-        compatible_with = compatible_with,
+        **kwargs
     )

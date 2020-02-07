@@ -67,8 +67,7 @@ def postcss_gen_runner(
         plugins,
         deps,
         map_annotation,
-        visibility = None,
-        compatible_with = None):
+        **kwargs):
     """Generates a PostCSS runner binary.
 
     Pass the result to a postcss_run rule to apply the runner to a css file.
@@ -83,19 +82,23 @@ def postcss_gen_runner(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
-        visibility: The visibility of the build rule.
-        compatible_with: Standard BUILD compatible_with.
+        **kwargs: Standard BUILD arguments to pass.
     """
 
     runner_src_name = "%s.runner_src" % name
+
+    kwargs_always_private = dict()
+    for (key, value) in kwargs:
+        if key == "visibility":
+            value = "//visibility:private"
+        kwargs_always_private[key] = value
 
     postcss_runner_src(
         name = runner_src_name,
         plugins = plugins,
         map_annotation = map_annotation,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
-        visibility = ["//visibility:private"],
-        compatible_with = compatible_with,
+        **kwargs_always_private
     )
 
     postcss_runner_bin(
@@ -105,6 +108,5 @@ def postcss_gen_runner(
             "@npm//minimist",
             "@npm//postcss",
         ] + deps,
-        visibility = visibility,
-        compatible_with = compatible_with,
+        **kwargs
     )
