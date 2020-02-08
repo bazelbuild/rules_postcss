@@ -17,6 +17,7 @@
 This generates the internal PostCSS runner as a nodejs_binary, that can later
 be used as an executable."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
 load(":plugin.bzl", "PostcssPluginInfo")
 
@@ -67,7 +68,7 @@ def postcss_gen_runner(
         plugins,
         deps,
         map_annotation,
-        visibility = None):
+        **kwargs):
     """Generates a PostCSS runner binary.
 
     Pass the result to a postcss_run rule to apply the runner to a css file.
@@ -82,7 +83,7 @@ def postcss_gen_runner(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
-        visibility: The visibility of the build rule.
+        **kwargs: Standard BUILD arguments to pass.
     """
 
     runner_src_name = "%s.runner_src" % name
@@ -92,7 +93,7 @@ def postcss_gen_runner(
         plugins = plugins,
         map_annotation = map_annotation,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
-        visibility = ["//visibility:private"],
+        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
     postcss_runner_bin(
@@ -102,5 +103,5 @@ def postcss_gen_runner(
             "@npm//minimist",
             "@npm//postcss",
         ] + deps,
-        visibility = visibility,
+        **kwargs
     )

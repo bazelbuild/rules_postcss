@@ -21,7 +21,7 @@ def autoprefixer(
         src,
         out,
         browsers = "> 1%",
-        visibility = None):
+        **kwargs):
     """Runs autoprefixer on the given source files located in the given fileset.
 
     Args:
@@ -32,7 +32,7 @@ def autoprefixer(
                   or "> 5%, > 2% in US, Firefox > 20").
                   See https://github.com/ai/browserslist for more queries. If empty
                   or blank, include all known prefixes. Default is '> 1%'.
-        visibility: The visibility of the build rule.
+        **kwargs: Additional arguments to pass to postcss_binary().
     """
 
     postcss_binary(
@@ -45,5 +45,5 @@ def autoprefixer(
         ],
         src = src,
         output_name = out,
-        visibility = visibility,
+        **kwargs
     )

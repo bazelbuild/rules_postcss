@@ -20,14 +20,14 @@ def rtlcss(
         name,
         src,
         out,
-        visibility = None):
+        **kwargs):
     """Runs rtlcss on the given source files located in the given fileset.
 
     Args:
         name: A unique label for this rule.
         src: Source file or target.
         out: Output file.
-        visibility: The visibility of the build rule.
+        **kwargs: Additional arguments to pass to postcss_binary().
     """
 
     postcss_binary(
@@ -40,5 +40,5 @@ def rtlcss(
         ],
         src = src,
         output_name = out,
-        visibility = visibility,
+        **kwargs
     )

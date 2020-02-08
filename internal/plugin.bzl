@@ -46,7 +46,7 @@ def postcss_plugin(
         srcs = [],
         data = [],
         deps = [],
-        visibility = None):
+        **kwargs):
     """Represents a Node.js module that is a PostCSS plugin.
 
     This provides extra metadata about PostCSS plugins that will be consumed by
@@ -61,17 +61,17 @@ def postcss_plugin(
         srcs: JS sources for the Node.js module, if any.
         data: Non-JS data files needed for the Node.js module.
         deps: Node.js module dependencies.
-        visibility: The visibility of the build rule.
+        **kwargs: Standard BUILD arguments to pass.
     """
 
     native.filegroup(
         name = name,
         srcs = srcs + data + deps,
-        visibility = visibility,
+        **kwargs
     )
 
     postcss_plugin_info(
         name = "%s.info" % name,
         node_require = node_require,
-        visibility = visibility,
+        **kwargs
     )

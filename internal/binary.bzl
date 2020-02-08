@@ -19,6 +19,7 @@ it using a provided list of PostCSS plugins, against input .css (and optionally
 .css.map).
 """
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":gen_runner.bzl", "postcss_gen_runner")
 load(":run.bzl", "postcss_run")
 
@@ -30,7 +31,7 @@ def postcss_binary(
         additional_outputs = [],
         output_name = "",
         map_annotation = False,
-        visibility = None):
+        **kwargs):
     """Runs PostCSS.
 
     Args:
@@ -48,7 +49,7 @@ def postcss_binary(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
-        visibility: The visibility of the build rule.
+        **kwargs: Standard BUILD arguments to pass.
     """
 
     runner_name = "%s.postcss_runner" % name
@@ -62,7 +63,7 @@ def postcss_binary(
         plugins = plugins_keyed_by_infos,
         deps = deps,
         map_annotation = map_annotation,
-        visibility = ["//visibility:private"],
+        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
     postcss_run(
@@ -71,5 +72,5 @@ def postcss_binary(
         output_name = output_name,
         additional_outputs = additional_outputs,
         runner = runner_name,
-        visibility = visibility,
+        **kwargs
     )
