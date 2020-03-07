@@ -20,6 +20,32 @@ ERROR_INPUT_NO_CSS = "Input of one file must be of a .css file"
 ERROR_INPUT_TWO_FILES = "Input of two files must be of a .css and .css.map file"
 ERROR_INPUT_TOO_MANY = "Input must be up to two files, a .css file, and optionally a .css.map file"
 
+def _run_one(ctx, input_css, input_map, output_css, output_map):
+    """Compile a single CSS file to a single output file."""
+
+    # Generate the command line.
+    args = [
+        "--binDir=%s" % ctx.bin_dir.path,
+        "--cssFile=%s" % input_css.path,
+        "--outCssFile=%s" % output_css.path,
+        "--outCssMapFile=%s" % output_map.path,
+    ]
+    if input_map:
+        args.append("--cssMapFile=%s" % input_map.path)
+
+    # The command may only access files declared in inputs.
+    inputs = [input_css] + ([input_map] if input_map else [])
+
+    ctx.actions.run(
+        outputs = [output_css, output_map] + (
+            ctx.outputs.additional_outputs if hasattr(ctx.outputs, "additional_outputs") else []
+        ),
+        inputs = inputs,
+        executable = ctx.executable.runner,
+        arguments = args,
+        progress_message = "Running PostCSS runner on %s" % input_css,
+    )
+
 def _postcss_run_impl(ctx):
     # Get the list of files. Fail here if there are more than two files.
     file_list = ctx.files.src
@@ -28,42 +54,23 @@ def _postcss_run_impl(ctx):
 
     # Get the .css and .css.map files from the list, which we expect to always
     # contain a .css file, and optionally a .css.map file.
-    css_file = None
-    css_map_file = None
+    input_css = None
+    input_map = None
     for input_file in file_list:
         if input_file.extension == "css":
-            if css_file != None:
+            if input_css != None:
                 fail(ERROR_INPUT_TWO_FILES)
-            css_file = input_file
+            input_css = input_file
             continue
         if input_file.extension == "map":
-            if css_map_file != None:
+            if input_map != None:
                 fail(ERROR_INPUT_TWO_FILES)
-            css_map_file = input_file
+            input_map = input_file
             continue
-    if css_file == None:
+    if input_css == None:
         fail(ERROR_INPUT_NO_CSS)
 
-    # Generate the command line.
-    args = [
-        "--binDir=%s" % ctx.bin_dir.path,
-        "--cssFile=%s" % css_file.path,
-        "--outCssFile=%s" % ctx.outputs.css_file.path,
-        "--outCssMapFile=%s" % ctx.outputs.css_map_file.path,
-    ]
-    if css_map_file:
-        args.append("--cssMapFile=%s" % css_map_file.path)
-
-    # The command may only access files declared in inputs.
-    inputs = [css_file] + ([css_map_file] if css_map_file else [])
-
-    ctx.actions.run(
-        outputs = [ctx.outputs.css_file, ctx.outputs.css_map_file] + ctx.outputs.additional_outputs,
-        inputs = inputs,
-        executable = ctx.executable.runner,
-        arguments = args,
-        progress_message = "Running PostCSS runner on %s" % ctx.attr.src.label,
-    )
+    _run_one(ctx, input_css, input_map, ctx.outputs.css_file, ctx.outputs.css_map_file)
 
 def _postcss_run_outputs(output_name):
     output_name = output_name or "%{name}.css"
@@ -89,4 +96,58 @@ postcss_run = rule(
         ),
     },
     outputs = _postcss_run_outputs,
+)
+
+def _postcss_multi_run_impl(ctx):
+    # A dict from .css filenames to two-element lists which contain
+    # [CSS file, soucemap file]. It's an error for a sourcemap to exist
+    # without a CSS file, but not vice versa.
+    files_by_name = {}
+    for f in ctx.files.srcs:
+        if f.extension == "map":
+            files_by_name.setdefault(_strip_extension(f.path), [None, None])[1] = f
+        else:
+            files_by_name.setdefault(f.path, [None, None])[0] = f
+
+    outputs = []
+    for (input_css, input_map) in files_by_name.values():
+        if not input_css:
+            fail("Source map file %s was passed without a corresponding CSS file." % input_map.path)
+
+        output_name = ctx.attr.output_pattern.format(
+            name = input_css.basename,
+            dir = input_css.dirname,
+            rule = ctx.label.name
+        )
+
+        output_css = ctx.actions.declare_file(output_name)
+        output_map = ctx.actions.declare_file(output_name + ".map")
+        outputs.append(output_css)
+        outputs.append(output_map)
+
+        _run_one(ctx, input_css, input_map, output_css, output_map)
+
+    return DefaultInfo(files = depset(outputs))
+
+def _strip_extension(path):
+    """Removes the final extension from a path."""
+    components = path.split(".")
+    components.pop()
+    return ".".join(components)
+
+postcss_multi_run = rule(
+    implementation = _postcss_multi_run_impl,
+    attrs = {
+        "srcs": attr.label_list(
+            allow_files = [".css", ".css.map"],
+            mandatory = True,
+        ),
+        "output_pattern": attr.string(default = "{rule}/{name}"),
+        "runner": attr.label(
+            executable = True,
+            cfg = "host",
+            allow_files = True,
+            mandatory = True,
+        ),
+    },
 )
