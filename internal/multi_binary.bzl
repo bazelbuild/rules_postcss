@@ -1,4 +1,4 @@
-# Copyright 2019 The Bazel Authors
+# Copyright 2020 The Bazel Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ def postcss_multi_binary(
         **kwargs):
     """Compiles multiple CSS files with the same PostCSS configuration.
 
-    This should generally be avoided if postcss_run would suffice. It's intended
-    to be used when the set of files to compile aren't known during the loading
-    phase.
+    This should generally be avoided if postcss_binary would suffice. It's
+    intended to be used when the set of files to compile aren't known during the
+    loading phase.
 
     Args:
         name: The name of the build rule.
@@ -60,6 +60,7 @@ def postcss_multi_binary(
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
         **kwargs: Standard BUILD arguments to pass.
+
     """
 
     runner_name = "%s.postcss_runner" % name
