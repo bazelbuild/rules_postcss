@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@bazel_tools//tools/build_rules:test_rules.bzl", "file_test")
+load("@bazel_tools//tools/build_rules:test_rules.bzl", "file_test", "rule_test")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -81,4 +81,15 @@ file_test(
     name = "additional_outputs_test",
     content = ADDITIONAL_OUTPUT,
     file = "//examples/additional_outputs:selectors.md",
+)
+
+rule_test(
+    name = "multi_binary_test",
+    rule = "//examples/multi_binary:styles",
+    generates = [
+        "styles/examples/multi_binary/style1.css",
+        "styles/examples/multi_binary/style1.css.map",
+        "styles/examples/multi_binary/style2.css",
+        "styles/examples/multi_binary/style2.css.map",
+    ]
 )
