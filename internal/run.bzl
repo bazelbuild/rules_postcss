@@ -16,7 +16,7 @@
 
 Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 
-load("//third_party/bazel_skylib/lib:paths.bzl", "paths")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 
 ERROR_INPUT_NO_CSS = "Input of one file must be of a .css file"
 ERROR_INPUT_TWO_FILES = "Input of two files must be of a .css and .css.map file"
