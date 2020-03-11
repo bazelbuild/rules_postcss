@@ -16,6 +16,8 @@
 
 Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
+
 ERROR_INPUT_NO_CSS = "Input of one file must be of a .css file"
 ERROR_INPUT_TWO_FILES = "Input of two files must be of a .css and .css.map file"
 ERROR_INPUT_TOO_MANY = "Input must be up to two files, a .css file, and optionally a .css.map file"
@@ -116,8 +118,8 @@ def _postcss_multi_run_impl(ctx):
 
         output_name = ctx.attr.output_pattern.format(
             name = input_css.basename,
-            dir = input_css.dirname,
-            rule = ctx.label.name
+            dir = paths.dirname(input_css.short_path),
+            rule = ctx.label.name,
         )
 
         output_css = ctx.actions.declare_file(output_name)
