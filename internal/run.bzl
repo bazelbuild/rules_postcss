@@ -90,6 +90,7 @@ postcss_run = rule(
         ),
         "output_name": attr.string(default = ""),
         "additional_outputs": attr.output_list(),
+        "data": attr.label_list(allow_files = True),
         "runner": attr.label(
             executable = True,
             cfg = "host",

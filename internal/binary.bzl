@@ -31,6 +31,7 @@ def postcss_binary(
         additional_outputs = [],
         output_name = "",
         map_annotation = False,
+        data = [],
         **kwargs):
     """Runs PostCSS.
 
@@ -49,6 +50,7 @@ def postcss_binary(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
+        data: Standard Bazel argument.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -72,5 +74,6 @@ def postcss_binary(
         output_name = output_name,
         additional_outputs = additional_outputs,
         runner = runner_name,
+        data = data,
         **kwargs
     )
