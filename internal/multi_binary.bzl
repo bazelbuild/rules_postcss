@@ -29,6 +29,7 @@ def postcss_multi_binary(
         srcs,
         output_pattern,
         map_annotation = False,
+        data = [],
         **kwargs):
     """Compiles multiple CSS files with the same PostCSS configuration.
 
@@ -59,6 +60,7 @@ def postcss_multi_binary(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
+        data: Standard Bazel argument.
         **kwargs: Standard BUILD arguments to pass.
 
     """
@@ -82,5 +84,6 @@ def postcss_multi_binary(
         srcs = srcs,
         output_pattern = output_pattern,
         runner = runner_name,
+        data = data,
         **kwargs
     )

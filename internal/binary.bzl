@@ -40,6 +40,17 @@ def postcss_binary(
         plugins: A map of plugin Node.js require paths (following the
             requirements of rules_nodejs), with values being config objects
             for each respective plugin.
+
+            Plugin configurations are interpreted as JavaScript code, and can
+            refer to the following pre-defined variables:
+
+            * `bazel.binDir`: The root of Bazel's generated binary tree.
+            * `bazel.data`: An array of all the file paths passed to the `data`
+              attribute of `postcss_binary`.
+            * `bazel.additionalOutputs`: An array of all the file paths passed
+              to the `additional_outputs` attribute of `postcss_binary`, to
+              which a plugin is expected to write.
+
         deps: A list of NodeJS modules the config depends on. The PostCSS module
             is always implicitly included.
         src: The input .css, and optionally .css.map files. (This includes

@@ -71,6 +71,7 @@ file_test(
 )
 
 DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
+
 @media screen and (max-width: 10px) {
   body {
     font: 42px "Comic Sans MS";

@@ -34,7 +34,7 @@ postcss_binary(
     src = ":style",
     data = ["header.txt"],
     plugins = {
-        ":header": "[{ path: 'build_bazel_rules_postcss/examples/data_attr/header.txt' }]",
+        ":header": "[{ path: bazel.data[0] }]",
     },
     deps = [":header"],
 )

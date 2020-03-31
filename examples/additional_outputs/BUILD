@@ -28,7 +28,7 @@ postcss_binary(
     name = "style_processed",
     src = "style.css",
     plugins = {
-        ":list_selectors": "[{markdownDir: 'examples/additional_outputs'}]",
+        ":list_selectors": "[{ output: bazel.additionalOutputs[0] }]",
     },
     additional_outputs = ["selectors.md"],
     deps = [

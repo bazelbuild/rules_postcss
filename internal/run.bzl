@@ -25,12 +25,20 @@ ERROR_INPUT_TOO_MANY = "Input must be up to two files, a .css file, and optional
 def _run_one(ctx, input_css, input_map, output_css, output_map):
     """Compile a single CSS file to a single output file."""
 
+    data = depset(transitive = [t.files for t in ctx.attr.data])
+    if hasattr(ctx.outputs, "additional_outputs"):
+        additional_outputs = ctx.outputs.additional_outputs
+    else:
+        additional_outputs = []
+
     # Generate the command line.
     args = [
         "--binDir=%s" % ctx.bin_dir.path,
         "--cssFile=%s" % input_css.path,
         "--outCssFile=%s" % output_css.path,
         "--outCssMapFile=%s" % output_map.path,
+        "--data=%s" % ','.join([f.path for f in data.to_list()]),
+        "--additionalOutputs=%s" % ','.join([f.path for f in additional_outputs])
     ]
     if input_map:
         args.append("--cssMapFile=%s" % input_map.path)
@@ -38,7 +46,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     # The command may only access files declared in inputs.
     inputs = depset(
         [input_css] + ([input_map] if input_map else []),
-        transitive = [t.files for t in ctx.attr.data]
+        transitive = [data]
     )
 
     ctx.actions.run(
@@ -149,6 +157,7 @@ postcss_multi_run = rule(
             mandatory = True,
         ),
         "output_pattern": attr.string(default = "{rule}/{name}"),
+        "data": attr.label_list(allow_files = True),
         "runner": attr.label(
             executable = True,
             cfg = "host",

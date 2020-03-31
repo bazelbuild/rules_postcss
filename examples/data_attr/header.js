@@ -26,6 +26,6 @@ module.exports = postcss.plugin('header', (opts = {}) => {
   const contents = fs.readFileSync(opts.path, 'utf8').trim();
 
   return css => {
-    css.prepend(postcss.comment({text: contents}));
+    css.prepend(postcss.comment({text: ' ' + contents}));
   };
 });
