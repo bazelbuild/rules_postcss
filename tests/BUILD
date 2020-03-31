@@ -70,6 +70,23 @@ file_test(
     file = "//examples/custom_plugin_ts:style_processed.css",
 )
 
+DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
+@media screen and (max-width: 10px) {
+  body {
+    font: 42px "Comic Sans MS";
+    flex: 42 -42 auto;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
+"""
+
+file_test(
+    name = "data_attr_test",
+    content = DATA_ATTR_OUTPUT,
+    file = "//examples/data_attr:style_processed.css",
+)
+
 ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
 
 - body (1 total)
