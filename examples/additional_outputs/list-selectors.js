@@ -44,7 +44,6 @@ module.exports = postcss.plugin('list-selectors', (opts = {}) => {
       markdown += `\n- ${selector} (${selectorCounts[selector]} total)`
     }
 
-    const outputPath = path.join(opts.markdownDir, 'selectors.md');
-    fs.writeFileSync(outputPath, markdown);
+    fs.writeFileSync(opts.output, markdown);
   };
 });

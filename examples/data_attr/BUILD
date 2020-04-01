@@ -12,26 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
 load("//:defs.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
 
 postcss_plugin(
-    name = "list_selectors",
-    node_require = "build_bazel_rules_postcss/examples/additional_outputs/list-selectors.js",
-    srcs = [
-        "list-selectors.js",
-    ],
+    name = "header",
+    node_require = "build_bazel_rules_postcss/examples/data_attr/header.js",
+    srcs = ["header.js"],
+)
+
+sass_binary(
+    name = "style",
+    src = "style.scss",
+    output_style = "expanded",
 )
 
 postcss_binary(
     name = "style_processed",
-    src = "style.css",
+    src = ":style",
+    data = ["header.txt"],
     plugins = {
-        ":list_selectors": "[{ output: bazel.additionalOutputs[0] }]",
+        ":header": "[{ path: bazel.data[0] }]",
     },
-    additional_outputs = ["selectors.md"],
-    deps = [
-        ":list_selectors",
-    ],
+    deps = [":header"],
 )

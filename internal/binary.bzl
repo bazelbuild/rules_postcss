@@ -31,6 +31,7 @@ def postcss_binary(
         additional_outputs = [],
         output_name = "",
         map_annotation = False,
+        data = [],
         **kwargs):
     """Runs PostCSS.
 
@@ -39,6 +40,17 @@ def postcss_binary(
         plugins: A map of plugin Node.js require paths (following the
             requirements of rules_nodejs), with values being config objects
             for each respective plugin.
+
+            Plugin configurations are interpreted as JavaScript code, and can
+            refer to the following pre-defined variables:
+
+            * `bazel.binDir`: The root of Bazel's generated binary tree.
+            * `bazel.data`: An array of all the file paths passed to the `data`
+              attribute of `postcss_binary`.
+            * `bazel.additionalOutputs`: An array of all the file paths passed
+              to the `additional_outputs` attribute of `postcss_binary`, to
+              which a plugin is expected to write.
+
         deps: A list of NodeJS modules the config depends on. The PostCSS module
             is always implicitly included.
         src: The input .css, and optionally .css.map files. (This includes
@@ -49,6 +61,7 @@ def postcss_binary(
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
+        data: Standard Bazel argument.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -72,5 +85,6 @@ def postcss_binary(
         output_name = output_name,
         additional_outputs = additional_outputs,
         runner = runner_name,
+        data = data,
         **kwargs
     )

@@ -27,7 +27,14 @@ const postcss = require('postcss');
 
 const args = minimist(process.argv.slice(2));
 const cwd = process.cwd();
-const binDir = args.binDir;
+
+// These variables are documented in `postcss_binary`'s docstring and are fair
+// game for plugin configuration to read.
+const bazel = {
+  binDir: args.binDir,
+  data: args.data.split(','),
+  additionalOutputs: args.additionalOutputs.split(','),
+};
 
 const cssString = fs.readFileSync(args.cssFile, 'utf8');
 const cssMapString =
@@ -53,11 +60,6 @@ const options = {
 const outCssPath = path.join(cwd, args.outCssFile);
 const outCssMapPath =
     args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
-
-// Change to the bin directory so that plugins that emit files can do so
-// relative to the output root of the workspace.
-const binPath = path.join(cwd, binDir);
-process.chdir(binPath);
 
 postcss(TEMPLATED_plugins)
     .process(cssString, options)
