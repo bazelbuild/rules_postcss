@@ -5,6 +5,7 @@
 ## Rules
 
 *   postcss_binary
+*   postcss_multi_binary
 *   postcss_plugin
 *   autoprefixer
 

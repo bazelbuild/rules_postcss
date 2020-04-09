@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@bazel_tools//tools/build_rules:test_rules.bzl", "file_test")
+load("@bazel_tools//tools/build_rules:test_rules.bzl", "file_test", "rule_test")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -70,6 +70,24 @@ file_test(
     file = "//examples/custom_plugin_ts:style_processed.css",
 )
 
+DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
+
+@media screen and (max-width: 10px) {
+  body {
+    font: 42px "Comic Sans MS";
+    flex: 42 -42 auto;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
+"""
+
+file_test(
+    name = "data_attr_test",
+    content = DATA_ATTR_OUTPUT,
+    file = "//examples/data_attr:style_processed.css",
+)
+
 ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
 
 - body (1 total)
@@ -81,4 +99,15 @@ file_test(
     name = "additional_outputs_test",
     content = ADDITIONAL_OUTPUT,
     file = "//examples/additional_outputs:selectors.md",
+)
+
+rule_test(
+    name = "multi_binary_test",
+    rule = "//examples/multi_binary:styles",
+    generates = [
+        "styles/examples/multi_binary/style1.css",
+        "styles/examples/multi_binary/style1.css.map",
+        "styles/examples/multi_binary/style2.css",
+        "styles/examples/multi_binary/style2.css.map",
+    ]
 )

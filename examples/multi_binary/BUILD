@@ -1,4 +1,4 @@
-# Copyright 2019 The Bazel Authors
+# Copyright 2020 The Bazel Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:defs.bzl", "postcss_binary", "postcss_plugin")
+load("//:defs.bzl", "postcss_plugin", "postcss_multi_binary")
 
 package(default_visibility = ["//tests:__subpackages__"])
 
+AUTO_PREFIXER_BROWSERS = "ie >= 9, edge >= 12, firefox >= 42, chrome >= 32, safari >= 8, opera >= 38, ios_saf >= 9.2, android >= 4.3, and_uc >= 9.9"
+
 postcss_plugin(
-    name = "list_selectors",
-    node_require = "build_bazel_rules_postcss/examples/additional_outputs/list-selectors.js",
-    srcs = [
-        "list-selectors.js",
-    ],
+    name = "autoprefixer",
+    node_require = "autoprefixer",
+    deps = ["@npm//autoprefixer"],
 )
 
-postcss_binary(
-    name = "style_processed",
-    src = "style.css",
+postcss_multi_binary(
+    name = "styles",
+    srcs = ["style1.css", "style2.css"],
+    output_pattern = "{rule}/{dir}/{name}",
     plugins = {
-        ":list_selectors": "[{ output: bazel.additionalOutputs[0] }]",
+        ":autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,
     },
-    additional_outputs = ["selectors.md"],
 )

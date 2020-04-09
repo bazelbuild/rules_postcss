@@ -19,10 +19,12 @@ Users should not load files under "/internal"
 
 load("//internal:plugin.bzl", _postcss_plugin = "postcss_plugin")
 load("//internal:binary.bzl", _postcss_binary = "postcss_binary")
+load("//internal:multi_binary.bzl", _postcss_multi_binary = "postcss_multi_binary")
 load("//internal/autoprefixer:build_defs.bzl", _autoprefixer = "autoprefixer")
 load("//internal/rtlcss:build_defs.bzl", _rtlcss = "rtlcss")
 
 postcss_plugin = _postcss_plugin
 postcss_binary = _postcss_binary
+postcss_multi_binary = _postcss_multi_binary
 autoprefixer = _autoprefixer
 rtlcss = _rtlcss
