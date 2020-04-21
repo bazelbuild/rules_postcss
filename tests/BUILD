@@ -54,8 +54,6 @@ CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: 42px) {
             flex: 42 -42 auto;
   }
 }
-
-/*# sourceMappingURL=style.css.map */
 """
 
 file_test(
@@ -78,8 +76,6 @@ DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
     flex: 42 -42 auto;
   }
 }
-
-/*# sourceMappingURL=style.css.map */
 """
 
 file_test(
@@ -101,13 +97,37 @@ file_test(
     file = "//examples/additional_outputs:selectors.md",
 )
 
+file_test(
+    name = "sourcemap_css_test",
+    file = "//examples/sourcemap:style_processed.css",
+    regexp = "/\\*# sourceMappingURL=style_processed\\.css\\.map \\*/",
+)
+
+# Test that not only is a source map generated, it points to the original Sass
+# file.
+file_test(
+    name = "sourcemap_map_test",
+    file = "//examples/sourcemap:style_processed.css.map",
+    regexp = "style\\.scss",
+)
+
 rule_test(
     name = "multi_binary_test",
     rule = "//examples/multi_binary:styles",
     generates = [
         "styles/examples/multi_binary/style1.css",
-        "styles/examples/multi_binary/style1.css.map",
         "styles/examples/multi_binary/style2.css",
-        "styles/examples/multi_binary/style2.css.map",
     ]
 )
+
+rule_test(
+    name = "multi_sourcemap_test",
+    rule = "//examples/multi_sourcemap:styles",
+    generates = [
+        "styles/examples/multi_sourcemap/style1.css",
+        "styles/examples/multi_sourcemap/style1.css.map",
+        "styles/examples/multi_sourcemap/style2.css",
+        "styles/examples/multi_sourcemap/style2.css.map",
+    ]
+)
+

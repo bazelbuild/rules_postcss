@@ -36,12 +36,11 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
         "--binDir=%s" % ctx.bin_dir.path,
         "--cssFile=%s" % input_css.path,
         "--outCssFile=%s" % output_css.path,
-        "--outCssMapFile=%s" % output_map.path,
         "--data=%s" % ','.join([f.path for f in data.to_list()]),
         "--additionalOutputs=%s" % ','.join([f.path for f in additional_outputs])
     ]
-    if input_map:
-        args.append("--cssMapFile=%s" % input_map.path)
+    if input_map: args.append("--cssMapFile=%s" % input_map.path)
+    if ctx.attr.sourcemap: args.append("--outCssMapFile=%s" % output_map.path)
 
     # The command may only access files declared in inputs.
     inputs = depset(
@@ -49,11 +48,13 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
         transitive = [data]
     )
 
+    outputs = [output_css]
+    if ctx.attr.sourcemap: outputs.append(output_map)
+    if hasattr(ctx.outputs, "additional_outputs"): outputs.extend(ctx.outputs.additional_outputs)
+
     ctx.actions.run(
-        outputs = [output_css, output_map] + (
-            ctx.outputs.additional_outputs if hasattr(ctx.outputs, "additional_outputs") else []
-        ),
         inputs = inputs,
+        outputs = outputs,
         executable = ctx.executable.runner,
         arguments = args,
         progress_message = "Running PostCSS runner on %s" % input_css,
@@ -83,14 +84,19 @@ def _postcss_run_impl(ctx):
     if input_css == None:
         fail(ERROR_INPUT_NO_CSS)
 
-    _run_one(ctx, input_css, input_map, ctx.outputs.css_file, ctx.outputs.css_map_file)
+    _run_one(
+        ctx = ctx,
+        input_css = input_css,
+        input_map = input_map,
+        output_css = ctx.outputs.css_file,
+        output_map = ctx.outputs.css_map_file if ctx.attr.sourcemap else None
+    )
 
-def _postcss_run_outputs(output_name):
+def _postcss_run_outputs(output_name, sourcemap):
     output_name = output_name or "%{name}.css"
-    return {
-        "css_file": output_name,
-        "css_map_file": "%s.map" % output_name,
-    }
+    outputs = {"css_file": output_name}
+    if sourcemap: outputs["css_map_file"] = output_name + ".map"
+    return outputs;
 
 postcss_run = rule(
     implementation = _postcss_run_impl,
@@ -101,6 +107,7 @@ postcss_run = rule(
         ),
         "output_name": attr.string(default = ""),
         "additional_outputs": attr.output_list(),
+        "sourcemap": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
         "runner": attr.label(
             executable = True,
@@ -135,11 +142,21 @@ def _postcss_multi_run_impl(ctx):
         )
 
         output_css = ctx.actions.declare_file(output_name)
-        output_map = ctx.actions.declare_file(output_name + ".map")
         outputs.append(output_css)
-        outputs.append(output_map)
 
-        _run_one(ctx, input_css, input_map, output_css, output_map)
+        if ctx.attr.sourcemap:
+            output_map = ctx.actions.declare_file(output_name + ".map")
+            outputs.append(output_map)
+        else:
+            output_map = None
+
+        _run_one(
+            ctx = ctx,
+            input_css = input_css,
+            input_map = input_map,
+            output_css = output_css,
+            output_map = output_map
+        )
 
     return DefaultInfo(files = depset(outputs))
 
@@ -157,6 +174,7 @@ postcss_multi_run = rule(
             mandatory = True,
         ),
         "output_pattern": attr.string(default = "{rule}/{name}"),
+        "sourcemap": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
         "runner": attr.label(
             executable = True,
