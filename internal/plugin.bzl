@@ -24,18 +24,17 @@ load("@build_bazel_rules_nodejs//:providers.bzl", "NpmPackageInfo")
 PostcssPluginInfo = provider(fields=["node_require"])
 
 def _postcss_plugin_info_impl(ctx):
-    direct_sources = depset(ctx.files.srcs)
-    sources_depsets = [direct_sources]
-
-    for dep in ctx.attr.deps:
-        if NpmPackageInfo in dep:
-            sources_depsets.append(dep[NpmPackageInfo].sources)
-
     return [
         PostcssPluginInfo(node_require=ctx.attr.node_require),
         NpmPackageInfo(
-            direct_sources = direct_sources,
-            sources = depset(transitive = sources_depsets),
+            direct_sources = depset(ctx.files.srcs),
+            sources = depset(
+                ctx.files.srcs,
+                transitive = [
+                    dep[NpmPackageInfo].sources
+                    for dep in ctx.attr.deps if NpmPackageInfo in dep
+                ],
+            ),
             workspace = "npm",
         )
     ]
