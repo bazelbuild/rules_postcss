@@ -25,9 +25,9 @@ load(":run.bzl", "postcss_multi_run")
 def postcss_multi_binary(
         name,
         plugins,
-        deps,
         srcs,
         output_pattern,
+        deps = [],
         map_annotation = False,
         data = [],
         **kwargs):
@@ -42,8 +42,6 @@ def postcss_multi_binary(
         plugins: A map of plugin Node.js require paths (following the
             requirements of rules_nodejs), with values being config objects
             for each respective plugin.
-        deps: A list of NodeJS modules the config depends on. The PostCSS module
-            is always implicitly included.
         srcs: The input .css (and optionally .css.map) files. If a .css.map file
             is passed, its corresponding .css file must also exist.
         output_pattern: A named pattern for the output file generated for each
@@ -57,6 +55,8 @@ def postcss_multi_binary(
             * "{rule}", the name of this rule.
 
             It defaults to "{rule}/{name}".
+        deps: A list of NodeJS modules the config depends on. The PostCSS module
+            is always implicitly included.
         map_annotation: Whether to add (or modify, if already existing) the
             sourceMappingURL comment in the output .css to point to the output
             .css.map.
@@ -67,14 +67,10 @@ def postcss_multi_binary(
 
     runner_name = "%s.postcss_runner" % name
 
-    plugins_keyed_by_infos = {}
-    for key, value in plugins.items():
-        plugins_keyed_by_infos["%s.info" % key] = value
-
     postcss_gen_runner(
         name = runner_name,
-        plugins = plugins_keyed_by_infos,
-        deps = deps,
+        plugins = plugins,
+        deps = deps + plugins.keys(),
         map_annotation = map_annotation,
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
