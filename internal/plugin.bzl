@@ -21,22 +21,23 @@ postcss_binary targets.
 
 load("@build_bazel_rules_nodejs//:providers.bzl", "NpmPackageInfo")
 
-PostcssPluginInfo = provider(fields=["node_require"])
+PostcssPluginInfo = provider(fields = ["node_require"])
 
 def _postcss_plugin_info_impl(ctx):
     return [
-        PostcssPluginInfo(node_require=ctx.attr.node_require),
+        PostcssPluginInfo(node_require = ctx.attr.node_require),
         NpmPackageInfo(
             direct_sources = depset(ctx.files.srcs),
             sources = depset(
                 ctx.files.srcs,
                 transitive = [
                     dep[NpmPackageInfo].sources
-                    for dep in ctx.attr.deps if NpmPackageInfo in dep
+                    for dep in ctx.attr.deps
+                    if NpmPackageInfo in dep
                 ],
             ),
             workspace = "npm",
-        )
+        ),
     ]
 
 postcss_plugin_info = rule(
@@ -56,7 +57,7 @@ format expected by the Node.js build rules.""",
     doc = """Metadata about a PostCSS plugin.
 
 This rule provides extra metadata about this PostCSS plugin required when using
-postcss_binary."""
+postcss_binary.""",
 )
 
 def postcss_plugin(

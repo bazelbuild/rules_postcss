@@ -19,8 +19,8 @@ package(default_visibility = ["//tests:__subpackages__"])
 
 postcss_plugin(
     name = "header",
-    node_require = "build_bazel_rules_postcss/examples/data_attr/header.js",
     srcs = ["header.js"],
+    node_require = "build_bazel_rules_postcss/examples/data_attr/header.js",
 )
 
 sass_binary(

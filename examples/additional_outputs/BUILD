@@ -18,17 +18,17 @@ package(default_visibility = ["//tests:__subpackages__"])
 
 postcss_plugin(
     name = "list_selectors",
-    node_require = "build_bazel_rules_postcss/examples/additional_outputs/list-selectors.js",
     srcs = [
         "list-selectors.js",
     ],
+    node_require = "build_bazel_rules_postcss/examples/additional_outputs/list-selectors.js",
 )
 
 postcss_binary(
     name = "style_processed",
     src = "style.css",
+    additional_outputs = ["selectors.md"],
     plugins = {
         ":list_selectors": "[{ output: bazel.additionalOutputs[0] }]",
     },
-    additional_outputs = ["selectors.md"],
 )

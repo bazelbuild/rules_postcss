@@ -27,8 +27,8 @@ bzl_library(
 postcss_plugin(
     name = "autoprefixer",
     node_require = "autoprefixer",
+    visibility = ["//visibility:public"],
     deps = [
         "@npm//autoprefixer",
     ],
-    visibility = ["//visibility:public"],
 )

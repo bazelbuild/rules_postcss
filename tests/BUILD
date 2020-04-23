@@ -103,11 +103,11 @@ file_test(
 
 rule_test(
     name = "multi_binary_test",
-    rule = "//examples/multi_binary:styles",
     generates = [
         "styles/examples/multi_binary/style1.css",
         "styles/examples/multi_binary/style1.css.map",
         "styles/examples/multi_binary/style2.css",
         "styles/examples/multi_binary/style2.css.map",
-    ]
+    ],
+    rule = "//examples/multi_binary:styles",
 )

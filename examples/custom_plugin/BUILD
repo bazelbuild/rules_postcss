@@ -21,18 +21,18 @@ AUTO_PREFIXER_BROWSERS = "ie >= 9, edge >= 12, firefox >= 42, chrome >= 32, safa
 
 postcss_plugin(
     name = "autoprefixer",
+    node_require = "autoprefixer",
     deps = [
         "@npm//autoprefixer",
     ],
-    node_require = "autoprefixer",
 )
 
 postcss_plugin(
     name = "unquote",
-    node_require = "build_bazel_rules_postcss/examples/custom_plugin/unquote.js",
     srcs = [
         "unquote.js",
     ],
+    node_require = "build_bazel_rules_postcss/examples/custom_plugin/unquote.js",
 )
 
 sass_binary(
