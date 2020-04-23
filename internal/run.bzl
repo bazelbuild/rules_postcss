@@ -39,8 +39,10 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
         "--data=%s" % ','.join([f.path for f in data.to_list()]),
         "--additionalOutputs=%s" % ','.join([f.path for f in additional_outputs])
     ]
-    if input_map: args.append("--cssMapFile=%s" % input_map.path)
-    if ctx.attr.sourcemap: args.append("--outCssMapFile=%s" % output_map.path)
+    if input_map:
+        args.append("--cssMapFile=%s" % input_map.path)
+    if ctx.attr.sourcemap:
+        args.append("--outCssMapFile=%s" % output_map.path)
 
     # The command may only access files declared in inputs.
     inputs = depset(
