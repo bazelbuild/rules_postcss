@@ -40,9 +40,6 @@ def autoprefixer(
         plugins = {
             "//internal/autoprefixer:autoprefixer": "[{ browsers: '%s' }]" % (browsers),
         },
-        deps = [
-            "@npm//autoprefixer",
-        ],
         src = src,
         output_name = out,
         **kwargs

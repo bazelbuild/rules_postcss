@@ -27,5 +27,8 @@ bzl_library(
 postcss_plugin(
     name = "rtlcss",
     node_require = "rtlcss",
+    deps = [
+        "@npm//rtlcss",
+    ],
     visibility = ["//visibility:public"],
 )

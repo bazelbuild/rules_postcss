@@ -19,10 +19,25 @@ Node.js source files, as well as promoting reuse of plugins across multiple
 postcss_binary targets.
 """
 
+load("@build_bazel_rules_nodejs//:providers.bzl", "NpmPackageInfo")
+
 PostcssPluginInfo = provider(fields=["node_require"])
 
 def _postcss_plugin_info_impl(ctx):
-    return [PostcssPluginInfo(node_require=ctx.attr.node_require)]
+    return [
+        PostcssPluginInfo(node_require=ctx.attr.node_require),
+        NpmPackageInfo(
+            direct_sources = depset(ctx.files.srcs),
+            sources = depset(
+                ctx.files.srcs,
+                transitive = [
+                    dep[NpmPackageInfo].sources
+                    for dep in ctx.attr.deps if NpmPackageInfo in dep
+                ],
+            ),
+            workspace = "npm",
+        )
+    ]
 
 postcss_plugin_info = rule(
     implementation = _postcss_plugin_info_impl,
@@ -32,6 +47,10 @@ postcss_plugin_info = rule(
             doc = """The Node.js require path for this plugin, following the
 format expected by the Node.js build rules.""",
             mandatory = True,
+        ),
+        "deps": attr.label_list(),
+        "srcs": attr.label_list(
+            allow_files = True,
         ),
     },
     doc = """Metadata about a PostCSS plugin.
@@ -64,14 +83,10 @@ def postcss_plugin(
         **kwargs: Standard BUILD arguments to pass.
     """
 
-    native.filegroup(
-        name = name,
-        srcs = srcs + data + deps,
-        **kwargs
-    )
-
     postcss_plugin_info(
-        name = "%s.info" % name,
+        name = name,
         node_require = node_require,
+        srcs = srcs,
+        deps = deps,
         **kwargs
     )

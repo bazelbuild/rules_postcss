@@ -31,7 +31,4 @@ postcss_binary(
         ":list_selectors": "[{ output: bazel.additionalOutputs[0] }]",
     },
     additional_outputs = ["selectors.md"],
-    deps = [
-        ":list_selectors",
-    ],
 )

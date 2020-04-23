@@ -36,5 +36,4 @@ postcss_binary(
     plugins = {
         ":header": "[{ path: bazel.data[0] }]",
     },
-    deps = [":header"],
 )

@@ -25,10 +25,10 @@ load(":run.bzl", "postcss_multi_run")
 def postcss_multi_binary(
         name,
         plugins,
-        deps,
         srcs,
         output_pattern,
         sourcemap = False,
+        deps = [],
         data = [],
         **kwargs):
     """Compiles multiple CSS files with the same PostCSS configuration.
@@ -42,8 +42,6 @@ def postcss_multi_binary(
         plugins: A map of plugin Node.js require paths (following the
             requirements of rules_nodejs), with values being config objects
             for each respective plugin.
-        deps: A list of NodeJS modules the config depends on. The PostCSS module
-            is always implicitly included.
         srcs: The input .css (and optionally .css.map) files. If a .css.map file
             is passed, its corresponding .css file must also exist.
         output_pattern: A named pattern for the output file generated for each
@@ -59,6 +57,8 @@ def postcss_multi_binary(
             It defaults to "{rule}/{name}".
         sourcemap: Whether to generate source maps. If False, any existing
             sourceMappingURL comments are deleted.
+        deps: A list of NodeJS modules the config depends on. The PostCSS module
+            is always implicitly included.
         data: Standard Bazel argument.
         **kwargs: Standard BUILD arguments to pass.
 
@@ -66,14 +66,10 @@ def postcss_multi_binary(
 
     runner_name = "%s.postcss_runner" % name
 
-    plugins_keyed_by_infos = {}
-    for key, value in plugins.items():
-        plugins_keyed_by_infos["%s.info" % key] = value
-
     postcss_gen_runner(
         name = runner_name,
-        plugins = plugins_keyed_by_infos,
-        deps = deps,
+        plugins = plugins,
+        deps = deps + plugins.keys(),
         sourcemap = sourcemap,
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
