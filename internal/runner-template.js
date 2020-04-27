@@ -37,23 +37,22 @@ const bazel = {
 };
 
 const cssString = fs.readFileSync(args.cssFile, 'utf8');
-const cssMapString =
-    args.cssMapFile ? fs.readFileSync(args.cssMapFile, 'utf8') : null;
 
 const options = {
   // The path of the input CSS file.
   from: args.cssFile,
   // The path of the output CSS file.
   to: args.outCssFile,
-  map: {
-    // Don't output the source map inline, we want it as a separate file.
-    inline: false,
-    // The input source map, if it was provided.
-    prev: cssMapString || undefined,
-    // Whether to add (or modify, if already existing) the sourceMappingURL
-    // comment in the output .css to point to the output .css.map.
-    annotation: TEMPLATED_map_annotation,
-  }
+  map: TEMPLATED_sourcemap
+      ? {
+          // Don't output the source map inline, we want it as a separate file.
+          inline: false,
+          // Whether to add (or modify, if already existing) the
+          // sourceMappingURL comment in the output .css to point to the output
+          // .css.map.
+          annotation: true,
+        }
+      : false,
 };
 
 // Get absolute output paths before we change directory.
@@ -66,7 +65,7 @@ postcss(TEMPLATED_plugins)
     .then(
         result => {
           fs.writeFileSync(outCssPath, result.css);
-          if (result.map) {
+          if (TEMPLATED_sourcemap && result.map) {
             fs.writeFileSync(outCssMapPath, result.map);
           }
         },
