@@ -40,7 +40,7 @@ def _postcss_runner_src_impl(ctx):
             # The array of PostCSS plugin objects.
             "TEMPLATED_plugins": "[%s]" % (",".join(plugins)) if plugins else "",
             # Lowercase Python boolean converts to true/false.
-            "TEMPLATED_map_annotation": str(ctx.attr.map_annotation).lower(),
+            "TEMPLATED_sourcemap": str(ctx.attr.sourcemap).lower(),
         },
     )
 
@@ -50,7 +50,7 @@ postcss_runner_src = rule(
         "plugins": attr.label_keyed_string_dict(
             mandatory = True,
         ),
-        "map_annotation": attr.bool(
+        "sourcemap": attr.bool(
             default = False,
         ),
         "template": attr.label(
@@ -67,7 +67,7 @@ def postcss_gen_runner(
         name,
         plugins,
         deps,
-        map_annotation,
+        sourcemap,
         **kwargs):
     """Generates a PostCSS runner binary.
 
@@ -80,9 +80,8 @@ def postcss_gen_runner(
             for each respective plugin.
         deps: A list of NodeJS modules the config depends on. The postcss module
             is included by default.
-        map_annotation: Whether to add (or modify, if already existing) the
-            sourceMappingURL comment in the output .css to point to the output
-            .css.map.
+        sourcemap: Whether to generate source maps. If False, any existing
+            sourceMappingURL comments are deleted.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -91,7 +90,7 @@ def postcss_gen_runner(
     postcss_runner_src(
         name = runner_src_name,
         plugins = plugins,
-        map_annotation = map_annotation,
+        sourcemap = sourcemap,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )

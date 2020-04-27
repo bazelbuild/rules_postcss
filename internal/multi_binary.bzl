@@ -27,8 +27,8 @@ def postcss_multi_binary(
         plugins,
         srcs,
         output_pattern,
+        sourcemap = False,
         deps = [],
-        map_annotation = False,
         data = [],
         **kwargs):
     """Compiles multiple CSS files with the same PostCSS configuration.
@@ -55,11 +55,10 @@ def postcss_multi_binary(
             * "{rule}", the name of this rule.
 
             It defaults to "{rule}/{name}".
+        sourcemap: Whether to generate source maps. If False, any existing
+            sourceMappingURL comments are deleted.
         deps: A list of NodeJS modules the config depends on. The PostCSS module
             is always implicitly included.
-        map_annotation: Whether to add (or modify, if already existing) the
-            sourceMappingURL comment in the output .css to point to the output
-            .css.map.
         data: Standard Bazel argument.
         **kwargs: Standard BUILD arguments to pass.
 
@@ -71,7 +70,7 @@ def postcss_multi_binary(
         name = runner_name,
         plugins = plugins,
         deps = deps + plugins.keys(),
-        map_annotation = map_annotation,
+        sourcemap = sourcemap,
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
@@ -80,6 +79,7 @@ def postcss_multi_binary(
         srcs = srcs,
         output_pattern = output_pattern,
         runner = runner_name,
+        sourcemap = sourcemap,
         data = data,
         **kwargs
     )
