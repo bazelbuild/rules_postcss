@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:defs.bzl", "postcss_plugin", "postcss_multi_binary")
+load("//:defs.bzl", "postcss_multi_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
 
@@ -26,7 +26,10 @@ postcss_plugin(
 
 postcss_multi_binary(
     name = "styles",
-    srcs = ["style1.css", "style2.css"],
+    srcs = [
+        "style1.css",
+        "style2.css",
+    ],
     output_pattern = "{rule}/{dir}/{name}",
     plugins = {
         ":autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,

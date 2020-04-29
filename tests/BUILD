@@ -113,21 +113,20 @@ file_test(
 
 rule_test(
     name = "multi_binary_test",
-    rule = "//examples/multi_binary:styles",
     generates = [
         "styles/examples/multi_binary/style1.css",
         "styles/examples/multi_binary/style2.css",
-    ]
+    ],
+    rule = "//examples/multi_binary:styles",
 )
 
 rule_test(
     name = "multi_sourcemap_test",
-    rule = "//examples/multi_sourcemap:styles",
     generates = [
         "styles/examples/multi_sourcemap/style1.css",
         "styles/examples/multi_sourcemap/style1.css.map",
         "styles/examples/multi_sourcemap/style2.css",
         "styles/examples/multi_sourcemap/style2.css.map",
-    ]
+    ],
+    rule = "//examples/multi_sourcemap:styles",
 )
-

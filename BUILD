@@ -26,4 +26,7 @@ bzl_library(
 
 exports_files(["LICENSE"])
 
-exports_files(["tsconfig.json"], visibility = ["//visibility:public"])
+exports_files(
+    ["tsconfig.json"],
+    visibility = ["//visibility:public"],
+)
