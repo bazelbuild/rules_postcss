@@ -32,6 +32,7 @@ def postcss_binary(
         output_name = "",
         sourcemap = False,
         data = [],
+        named_data = {},
         **kwargs):
     """Runs PostCSS.
 
@@ -44,11 +45,24 @@ def postcss_binary(
             refer to the following pre-defined variables:
 
             * `bazel.binDir`: The root of Bazel's generated binary tree.
-            * `bazel.data`: An array of all the file paths passed to the `data`
-              attribute of `postcss_binary`.
+
             * `bazel.additionalOutputs`: An array of all the file paths passed
               to the `additional_outputs` attribute of `postcss_binary`, to
               which a plugin is expected to write.
+
+            * `bazel.data`: An array of all the file paths for targets passed to
+              the `data` or `named_data` attribute of `postcss_binary`.
+
+              `bazel.data.${name}` can also be used to access the file paths for
+              individual targets passed to `named_data`. For example, if you
+              pass `named_data = {"license": "license.txt"}`, you can access
+              the path of the license file via `bazel.data.license[0]`.
+
+              It's strongly recommended to use `named_data` over `data` when you
+              want to access a specific target's file(s), and only use the array
+              value to access *all* data files no matter which target they come
+              from.
+
         src: The input .css, and optionally .css.map files. (This includes
             outputs from preprocessors such as sass_binary.)
         deps: Additional NodeJS modules the config depends on. The PostCSS
@@ -59,6 +73,9 @@ def postcss_binary(
         sourcemap: Whether to generate a source map. If False, any existing
             sourceMappingURL comment is deleted.
         data: Standard Bazel argument.
+        named_data: A map from names to targets to use as data dependencies.
+            This works just like `data` except that the targets' files can be
+            accessed through `bazel.data.${name}`.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -80,5 +97,6 @@ def postcss_binary(
         runner = runner_name,
         sourcemap = sourcemap,
         data = data,
+        named_data = named_data,
         **kwargs
     )

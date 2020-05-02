@@ -84,6 +84,12 @@ file_test(
     file = "//examples/data_attr:style_processed.css",
 )
 
+file_test(
+    name = "positional_data_attr_test",
+    content = DATA_ATTR_OUTPUT,
+    file = "//examples/positional_data_attr:style_processed.css",
+)
+
 ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
 
 - body (1 total)
