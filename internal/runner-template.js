@@ -28,12 +28,32 @@ const postcss = require('postcss');
 const args = minimist(process.argv.slice(2));
 const cwd = process.cwd();
 
+/**
+ * Returns the argument named `name` as an array.
+ *
+ * Minimist automatically converts args that are passed multiple times into
+ * arrays. This ensures a consistent representation if the same arg is passed
+ * zero or one times.
+ */
+function argAsArray(name) {
+  const value = args[name];
+  if (!value) return [];
+  if (typeof value === 'string') return [value];
+  return value;
+}
+
+const data = argAsArray('data');
+for (const pair of argAsArray('namedData')) {
+  const [name, value] = pair.split(':');
+  (data[name] = data[name] || []).push(value);
+}
+
 // These variables are documented in `postcss_binary`'s docstring and are fair
 // game for plugin configuration to read.
 const bazel = {
   binDir: args.binDir,
-  data: args.data.split(','),
-  additionalOutputs: args.additionalOutputs.split(','),
+  data: data,
+  additionalOutputs: argAsArray('additionalOutputs'),
 };
 
 const cssString = fs.readFileSync(args.cssFile, 'utf8');

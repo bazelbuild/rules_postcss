@@ -1,4 +1,4 @@
-# Copyright 2019 The Bazel Authors
+# Copyright 2020 The Bazel Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package(default_visibility = ["//tests:__subpackages__"])
 postcss_plugin(
     name = "header",
     srcs = ["header.js"],
-    node_require = "build_bazel_rules_postcss/examples/data_attr/header.js",
+    node_require = "build_bazel_rules_postcss/examples/positional_data_attr/header.js",
 )
 
 sass_binary(
@@ -32,8 +32,8 @@ sass_binary(
 postcss_binary(
     name = "style_processed",
     src = ":style",
-    named_data = {"header": "header.txt"},
+    data = ["header.txt"],
     plugins = {
-        ":header": "[{ path: bazel.data.header[0] }]",
+        ":header": "[{ path: bazel.data[0] }]",
     },
 )
