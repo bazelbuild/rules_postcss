@@ -103,7 +103,7 @@ def _postcss_run_impl(ctx):
         output_map = ctx.outputs.css_map_file if ctx.attr.sourcemap else None,
     )
 
-    return DefaultInfo(files = depset(outputs))
+    return DefaultInfo(files = depset(outputs), runfiles = ctx.runfiles(files = outputs))
 
 def _postcss_run_outputs(output_name, sourcemap):
     output_name = output_name or "%{name}.css"
@@ -187,7 +187,7 @@ def _postcss_multi_run_impl(ctx):
             output_map = output_map,
         ))
 
-    return DefaultInfo(files = depset(outputs))
+    return DefaultInfo(files = depset(outputs), runfiles = ctx.runfiles(files = outputs))
 
 def _strip_extension(path):
     """Removes the final extension from a path."""
