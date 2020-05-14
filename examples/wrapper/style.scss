@@ -1,0 +1,5 @@
+$foo: 42px;
+
+body {
+    padding: $foo ($foo - 2px) ($foo - 4px) ($foo - 6px);
+}
