@@ -64,15 +64,17 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     # If a wrapper binary is passed, run it. It gets the actual binary as an
     # input and the path to it as the first arg.
     executable = ctx.executable.runner
+    tools = []
     if ctx.executable.wrapper:
-      inputs = depset([ctx.executable.runner], transitive = [inputs])
-      executable = ctx.executable.wrapper
-      args = [ctx.executable.runner.path] + args
+        tools = [ctx.executable.runner]
+        executable = ctx.executable.wrapper
+        args = [ctx.executable.runner.path] + args
 
     ctx.actions.run(
         inputs = inputs,
         outputs = outputs,
         executable = executable,
+        tools = tools,
         arguments = args,
         progress_message = "Running PostCSS runner on %s" % input_css,
     )
