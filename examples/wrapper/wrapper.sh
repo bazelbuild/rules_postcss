@@ -15,19 +15,22 @@
 
 echo "argv is: $@"
 
-echo "wrapped executable is: $1"
+executable=$1
+shift
 
-echo "sliced argv is: ${@:2}"
+echo "wrapped executable is: $executable"
+
+echo "sliced argv is: $@"
 
 echo "running wrapped executable"
 
-$1 ${@:2}
+$executable $@
 
 echo "finished running wrapped executable"
 
 while [ $# -gt 0 ]; do
-    if [[ $1 == *"--outCssFile="* ]]; then
-        outCssFile="${1/--outCssFile=/}"
+    if case $1 in "--outCssFile="*) true;; *) false;; esac; then
+        outCssFile=$(printf '%s' "$1" | sed 's/--outCssFile=//')
     fi
     shift
 done
