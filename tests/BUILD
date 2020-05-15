@@ -136,3 +136,15 @@ rule_test(
     ],
     rule = "//examples/multi_sourcemap:styles",
 )
+
+WRAPPER_OUTPUT = """body {
+  padding: 42px 36px 38px 40px;
+}
+/*hello!*/
+"""
+
+file_test(
+    name = "wrapper_test",
+    content = WRAPPER_OUTPUT,
+    file = "//examples/wrapper:style_processed.css",
+)

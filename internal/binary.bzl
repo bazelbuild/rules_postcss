@@ -33,6 +33,7 @@ def postcss_binary(
         sourcemap = False,
         data = [],
         named_data = {},
+        wrapper = None,
         **kwargs):
     """Runs PostCSS.
 
@@ -76,6 +77,9 @@ def postcss_binary(
         named_data: A map from names to targets to use as data dependencies.
             This works just like `data` except that the targets' files can be
             accessed through `bazel.data.${name}`.
+        wrapper: Wrapper for the postcss binary. If passed, the wrapper is run
+            in place of the postcss binary, with an extra first arg pointing
+            to the actual postcss binary.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -98,5 +102,6 @@ def postcss_binary(
         sourcemap = sourcemap,
         data = data,
         named_data = named_data,
+        wrapper = wrapper,
         **kwargs
     )

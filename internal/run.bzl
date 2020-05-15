@@ -61,10 +61,20 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     if hasattr(ctx.outputs, "additional_outputs"):
         outputs.extend(ctx.outputs.additional_outputs)
 
+    # If a wrapper binary is passed, run it. It gets the actual binary as an
+    # input and the path to it as the first arg.
+    executable = ctx.executable.runner
+    tools = []
+    if ctx.executable.wrapper:
+        tools = [ctx.executable.runner]
+        executable = ctx.executable.wrapper
+        args = [ctx.executable.runner.path] + args
+
     ctx.actions.run(
         inputs = inputs,
         outputs = outputs,
-        executable = ctx.executable.runner,
+        executable = executable,
+        tools = tools,
         arguments = args,
         progress_message = "Running PostCSS runner on %s" % input_css,
     )
@@ -144,6 +154,11 @@ _postcss_run = rule(
             allow_files = True,
             mandatory = True,
         ),
+        "wrapper": attr.label(
+            executable = True,
+            cfg = "host",
+            allow_files = True,
+        ),
     },
     outputs = _postcss_run_outputs,
 )
@@ -211,6 +226,11 @@ _postcss_multi_run = rule(
             cfg = "host",
             allow_files = True,
             mandatory = True,
+        ),
+        "wrapper": attr.label(
+            executable = True,
+            cfg = "host",
+            allow_files = True,
         ),
     },
 )
