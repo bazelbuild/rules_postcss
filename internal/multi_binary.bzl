@@ -69,7 +69,7 @@ def postcss_multi_binary(
     postcss_gen_runner(
         name = runner_name,
         plugins = plugins,
-        deps = deps + plugins.keys(),
+        deps = deps + list(plugins.keys()),
         sourcemap = sourcemap,
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
