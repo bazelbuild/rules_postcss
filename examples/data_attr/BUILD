@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
 load("//:defs.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
@@ -23,15 +22,9 @@ postcss_plugin(
     node_require = "build_bazel_rules_postcss/examples/data_attr/header.js",
 )
 
-sass_binary(
-    name = "style",
-    src = "style.scss",
-    output_style = "expanded",
-)
-
 postcss_binary(
     name = "style_processed",
-    src = ":style",
+    src = "style.css",
     named_data = {"header": "header.txt"},
     plugins = {
         ":header": "[{ path: bazel.data.header[0] }]",
