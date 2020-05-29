@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
 load("//:defs.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
@@ -25,12 +24,6 @@ postcss_plugin(
     ],
 )
 
-sass_binary(
-    name = "style",
-    src = "style.scss",
-    output_style = "expanded",
-)
-
 sh_binary(
     name = "wrapper",
     srcs = ["wrapper.sh"],
@@ -38,7 +31,7 @@ sh_binary(
 
 postcss_binary(
     name = "style_processed",
-    src = ":style",
+    src = "style.css",
     wrapper = ":wrapper",
     plugins = {
         ":rtlcss": "",

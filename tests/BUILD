@@ -45,13 +45,10 @@ file_test(
     file = "//examples/rtlcss:style_processed.css",
 )
 
-CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: 42px) {
+CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: $(sidebar.width)) {
   body {
-    font: 42px "Comic Sans MS";
-    -webkit-box-flex: 42;
-    -webkit-flex: 42 -42 auto;
-        -ms-flex: 42 -42 auto;
-            flex: 42 -42 auto;
+    font: $(blog.title.font.size) 'Comic Sans MS';
+    flex: 42 -42 auto;
   }
 }
 """
@@ -69,10 +66,9 @@ file_test(
 )
 
 DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
-
 @media screen and (max-width: 10px) {
   body {
-    font: 42px "Comic Sans MS";
+    font: 42px 'Comic Sans MS';
     flex: 42 -42 auto;
   }
 }
@@ -138,7 +134,7 @@ rule_test(
 )
 
 WRAPPER_OUTPUT = """body {
-  padding: 42px 36px 38px 40px;
+    padding: 42px 36px 38px 40px;
 }
 /*hello!*/
 """
