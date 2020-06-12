@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 bzl_library(
     name = "build_defs",
@@ -21,6 +22,22 @@ bzl_library(
         "//internal:build_defs",
         "//internal/autoprefixer:build_defs",
         "//internal/rtlcss:build_defs",
+    ],
+)
+
+pkg_npm(
+    name = "npm_package",
+    srcs = [
+        "defs.bzl",
+        "LICENSE",
+        "package.bzl",
+        "package.json",
+        "README.md",
+    ],
+    deps = [
+        "//internal:package_contents",
+        "//internal/autoprefixer:package_contents",
+        "//internal/rtlcss:package_contents",
     ],
 )
 
