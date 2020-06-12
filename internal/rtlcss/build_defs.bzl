@@ -14,7 +14,7 @@
 
 """Build rule for using rtlcss to postprocess CSS."""
 
-load("//internal:binary.bzl", "postcss_binary")
+load("@build_bazel_rules_postcss//internal:binary.bzl", "postcss_binary")
 
 def rtlcss(
         name,
@@ -33,7 +33,7 @@ def rtlcss(
     postcss_binary(
         name = name,
         plugins = {
-            "//internal/rtlcss:rtlcss": "",
+            "@build_bazel_rules_postcss//internal/rtlcss:rtlcss": "",
         },
         src = src,
         output_name = out,

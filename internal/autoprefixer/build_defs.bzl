@@ -14,7 +14,7 @@
 
 """Build rule for using autoprefixer to postprocess CSS."""
 
-load("//internal:binary.bzl", "postcss_binary")
+load("@build_bazel_rules_postcss//internal:binary.bzl", "postcss_binary")
 
 def autoprefixer(
         name,
@@ -38,7 +38,7 @@ def autoprefixer(
     postcss_binary(
         name = name,
         plugins = {
-            "//internal/autoprefixer:autoprefixer": "[{ browsers: '%s' }]" % (browsers),
+            "@build_bazel_rules_postcss//internal/autoprefixer:autoprefixer": "[{ browsers: '%s' }]" % (browsers),
         },
         src = src,
         output_name = out,

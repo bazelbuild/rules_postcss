@@ -13,7 +13,7 @@
 # limitations under the License.
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//internal:plugin.bzl", "postcss_plugin")
+load("@build_bazel_rules_postcss//internal:plugin.bzl", "postcss_plugin")
 
 bzl_library(
     name = "build_defs",
