@@ -13,7 +13,9 @@
 # limitations under the License.
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+# BEGIN-INTERNAL
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
+# END-INTERNAL
 
 bzl_library(
     name = "build_defs",
@@ -25,9 +27,18 @@ bzl_library(
     ],
 )
 
+exports_files(["LICENSE"])
+
+# BEGIN-INTERNAL
+exports_files(
+    ["tsconfig.json"],
+    visibility = ["//visibility:public"],
+)
+
 pkg_npm(
     name = "npm_package",
     srcs = [
+        "BUILD",
         "defs.bzl",
         "LICENSE",
         "package.bzl",
@@ -40,10 +51,4 @@ pkg_npm(
         "//internal/rtlcss:package_contents",
     ],
 )
-
-exports_files(["LICENSE"])
-
-exports_files(
-    ["tsconfig.json"],
-    visibility = ["//visibility:public"],
-)
+# END-INTERNAL
