@@ -27,11 +27,6 @@
         "postcss": "^7.0.7"
     },
     "devDependencies": {
-        "@bazel/typescript": "^1.0.1"
-    },
-    "bazelWorkspaces": {
-        "build_bazel_rules_postcss": {
-            "rootPath": "."
-        }
+        "@bazel/typescript": "^2.0.0-rc.0"
     }
 }

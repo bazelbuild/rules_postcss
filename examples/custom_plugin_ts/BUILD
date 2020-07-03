@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@npm_bazel_typescript//:index.bzl", "ts_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
 load("//:defs.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
