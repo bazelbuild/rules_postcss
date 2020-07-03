@@ -37,21 +37,13 @@ Add the `@bazel/postcss` npm package to your `devDependencies` in
 `package.json`.
 
 Your `WORKSPACE` should declare a `yarn_install` or `npm_install` rule named
-`npm`. It should then install the rules found in the npm packages using the
-`install_bazel_dependencies' function.
+`npm`.
 See https://github.com/bazelbuild/rules_nodejs/#quickstart
 
-This causes the `@bazel/postcss` package to be installed as a Bazel workspace
-named `build_bazel_rules_postcss`.
+This causes the build rules to be made available under
+`@npm//@bazel/postcss:defs.bzl`.
 
-Now add this to your `WORKSPACE` to install the PostCSS dependencies:
-
-```python
-# Fetch transitive Bazel dependencies of PostCSS. This is an optional step
-# because you can always fetch the required transitive dependencies yourself.
-load("@build_bazel_rules_postcss//:package.bzl", "rules_postcss_dependencies")
-rules_postcss_dependencies()
-```
+**TODO:** Compare to using PostCSS directly using `rules_nodejs`.
 
 ### Using repository rules
 
@@ -66,17 +58,10 @@ http_archive(
     strip_prefix = "NOT_PUBLISHED_YET",
     sha256 = "NOT_PUBLISHED_YET",
 )
-
-# Fetch transitive Bazel dependencies of PostCSS. This is an optional step
-# because you can always fetch the required transitive dependencies yourself.
-load("@build_bazel_rules_postcss//:package.bzl", "rules_postcss_dependencies")
-rules_postcss_dependencies()
-
-# Setup repositories which are needed for PostCSS. This is an optional step
-# because you can always setup the required repositories yourself.
-load("@build_bazel_rules_postcss//:defs.bzl", "postcss_repositories")
-postcss_repositories()
 ```
+
+This causes the build rules to be made available under
+`@build_bazel_rules_postcss//:defs.bzl`.
 
 ## Basic Example
 
