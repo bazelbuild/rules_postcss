@@ -61,7 +61,7 @@ http_archive(
 ```
 
 This causes the build rules to be made available under
-`@build_bazel_rules_postcss//:defs.bzl`.
+`@build_bazel_rules_postcss//:index.bzl`.
 
 ## Basic Example
 
