@@ -44,10 +44,10 @@ def rules_postcss_dependencies():
     _include_if_not_defined(
         http_archive,
         name = "io_bazel_rules_sass",
-        sha256 = "617e444f47a1f3e25eb1b6f8e88a2451d54a2afdc7c50518861d9f706fc8baaa",
+        sha256 = "9dcfba04e4af896626f4760d866f895ea4291bc30bf7287887cefcf4707b6a62",
         urls = [
-            "https://github.com/bazelbuild/rules_sass/archive/1.23.7.zip",
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/1.23.7.zip",
+            "https://github.com/bazelbuild/rules_sass/archive/1.26.3.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/1.26.3.zip",
         ],
-        strip_prefix = "rules_sass-1.23.7",
+        strip_prefix = "rules_sass-1.26.3",
     )
