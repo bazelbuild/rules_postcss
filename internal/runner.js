@@ -25,6 +25,7 @@ const minimist = require('minimist');
 const path = require('path');
 const postcss = require('postcss');
 const runfiles = require(process.env['BAZEL_NODE_RUNFILES_HELPER']);
+const worker = require('@bazel/worker');
 
 /**
  * Returns the argument named `name` as an array.

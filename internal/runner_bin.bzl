@@ -37,6 +37,7 @@ def postcss_runner_bin(
         data = [
             "@npm//minimist",
             "@npm//postcss",
+            "@npm//@bazel/worker",
         ] + deps,
         **kwargs
     )
