@@ -41,7 +41,7 @@ Your `WORKSPACE` should declare a `yarn_install` or `npm_install` rule named
 See https://github.com/bazelbuild/rules_nodejs/#quickstart
 
 This causes the build rules to be made available under
-`@npm//@bazel/postcss:defs.bzl`.
+`@npm//@bazel/postcss:index.bzl`.
 
 **TODO:** Compare to using PostCSS directly using `rules_nodejs`.
 
