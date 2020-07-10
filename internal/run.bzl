@@ -16,6 +16,7 @@
 
 Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 
+load("@build_bazel_rules_nodejs//:providers.bzl", "run_node")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
 ERROR_INPUT_NO_CSS = "Input of one file must be of a .css file"
@@ -63,15 +64,17 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
 
     # If a wrapper binary is passed, run it. It gets the actual binary as an
     # input and the path to it as the first arg.
-    executable = ctx.executable.runner
+    executable = "runner"
     tools = []
     if ctx.executable.wrapper:
         tools = [ctx.executable.runner]
-        executable = ctx.executable.wrapper
+        executable = "wrapper"
         args = [ctx.executable.runner.path] + args
 
-    ctx.actions.run(
-        inputs = inputs,
+    run_node(
+        ctx = ctx,
+        # run_node in rules_nodejs 2.0.0-rc.1 only supports lists, no depsets.
+        inputs = inputs.to_list(),
         outputs = outputs,
         executable = executable,
         tools = tools,
