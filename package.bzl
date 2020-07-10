@@ -36,8 +36,8 @@ def rules_postcss_dependencies():
     _include_if_not_defined(
         http_archive,
         name = "build_bazel_rules_nodejs",
-        sha256 = "790af2f3739871fedfb5721263e145e6ca6559c3c90bcaf6f3482a165d411827",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.0-rc.0/rules_nodejs-2.0.0-rc.0.tar.gz"],
+        sha256 = "aa0b0a71afd4e1f203b7092c3284a6606a5bfac77e0bd31f071b37bcac0f7cf3",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.0-rc.1/rules_nodejs-2.0.0-rc.1.tar.gz"],
     )
 
     # Sass rules.
