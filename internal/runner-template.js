@@ -80,7 +80,13 @@ const outCssPath = path.join(cwd, args.outCssFile);
 const outCssMapPath =
     args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
 
-postcss(TEMPLATED_plugins)
+// We receive a map of PostCSS plugin requires => array of args to the plugins.
+// To use in PostCSS, convert this map into the actual plugin instances.
+const pluginMap = TEMPLATED_plugins;
+const pluginInstances = Object.entries(pluginMap).map(
+    ([nodeRequire, args]) => require(nodeRequire).apply(this, args));
+
+postcss(pluginInstances)
     .process(cssString, options)
     .then(
         result => {
