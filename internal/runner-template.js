@@ -24,6 +24,7 @@ const fs = require('fs');
 const minimist = require('minimist');
 const path = require('path');
 const postcss = require('postcss');
+const runfiles = require(process.env['BAZEL_NODE_RUNFILES_HELPER']);
 
 const args = minimist(process.argv.slice(2));
 const cwd = process.cwd();
@@ -84,7 +85,22 @@ const outCssMapPath =
 // To use in PostCSS, convert this map into the actual plugin instances.
 const pluginMap = TEMPLATED_plugins;
 const pluginInstances = Object.entries(pluginMap).map(
-    ([nodeRequire, args]) => require(nodeRequire).apply(this, args));
+    ([nodeRequire, args]) => {
+      // Try and resolve this plugin as a module identifier.
+      let plugin;
+      try {
+        plugin = require(nodeRequire);
+      } catch { }
+
+      // If it fails, use the runfile helper in case it's a workspace file.
+      if (!plugin) {
+        try {
+          plugin = require(runfiles.resolve(nodeRequire));
+        } catch { }
+      }
+
+      return plugin.apply(this, args);
+    });
 
 postcss(pluginInstances)
     .process(cssString, options)
