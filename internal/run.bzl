@@ -76,8 +76,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     else:
         run_node(
             ctx = ctx,
-            # run_node in rules_nodejs 2.0.0-rc.1 only supports lists, no depsets.
-            inputs = inputs.to_list(),
+            inputs = inputs,
             outputs = outputs,
             executable = "runner",
             tools = [],
