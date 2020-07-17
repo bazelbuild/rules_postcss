@@ -64,7 +64,7 @@ const options = {
   from: args.cssFile,
   // The path of the output CSS file.
   to: args.outCssFile,
-  map: TEMPLATED_sourcemap
+  map: args.sourcemap
       ? {
           // Don't output the source map inline, we want it as a separate file.
           inline: false,
@@ -115,7 +115,7 @@ postcss(pluginInstances)
     .then(
         result => {
           fs.writeFileSync(outCssPath, result.css);
-          if (TEMPLATED_sourcemap && result.map) {
+          if (args.sourcemap && result.map) {
             fs.writeFileSync(outCssMapPath, result.map);
           }
         },

@@ -39,8 +39,6 @@ def _postcss_runner_src_impl(ctx):
         substitutions = {
             # Map of PostCSS plugin requires => arrays of args to the plugins.
             "TEMPLATED_plugins": "{%s}" % (",".join(plugins)) if plugins else "",
-            # Lowercase Python boolean converts to true/false.
-            "TEMPLATED_sourcemap": str(ctx.attr.sourcemap).lower(),
         },
     )
 
@@ -49,9 +47,6 @@ postcss_runner_src = rule(
     attrs = {
         "plugins": attr.label_keyed_string_dict(
             mandatory = True,
-        ),
-        "sourcemap": attr.bool(
-            default = False,
         ),
         "template": attr.label(
             allow_single_file = [".js"],
@@ -67,7 +62,6 @@ def postcss_gen_runner(
         name,
         plugins,
         deps,
-        sourcemap,
         **kwargs):
     """Generates a PostCSS runner binary.
 
@@ -80,8 +74,6 @@ def postcss_gen_runner(
             for each respective plugin.
         deps: A list of NodeJS modules the config depends on. The postcss module
             is included by default.
-        sourcemap: Whether to generate source maps. If False, any existing
-            sourceMappingURL comments are deleted.
         **kwargs: Standard BUILD arguments to pass.
     """
 
@@ -90,7 +82,6 @@ def postcss_gen_runner(
     postcss_runner_src(
         name = runner_src_name,
         plugins = plugins,
-        sourcemap = sourcemap,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )

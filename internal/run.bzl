@@ -58,7 +58,9 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
 
     outputs = [output_css]
     if ctx.attr.sourcemap:
+        args.append("--sourcemap")
         outputs.append(output_map)
+
     if hasattr(ctx.outputs, "additional_outputs"):
         outputs.extend(ctx.outputs.additional_outputs)
 
