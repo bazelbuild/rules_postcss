@@ -72,7 +72,7 @@ def postcss_multi_binary(
         deps = [
             "@npm//minimist",
             "@npm//postcss",
-        ] + list(plugins.keys()),
+        ] + deps + list(plugins.keys()),
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 

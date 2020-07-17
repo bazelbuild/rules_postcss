@@ -91,7 +91,7 @@ def postcss_binary(
         deps = [
             "@npm//minimist",
             "@npm//postcss",
-        ] + plugins.keys(),
+        ] + deps + plugins.keys(),
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
