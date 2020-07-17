@@ -87,7 +87,6 @@ def postcss_binary(
 
     postcss_gen_runner(
         name = runner_name,
-        plugins = plugins,
         deps = deps + plugins.keys(),
         **dicts.add({"visibility": ["//visibility:private"]})
     )
@@ -97,6 +96,7 @@ def postcss_binary(
         src = src,
         output_name = output_name,
         additional_outputs = additional_outputs,
+        plugins = plugins,
         runner = runner_name,
         sourcemap = sourcemap,
         data = data,

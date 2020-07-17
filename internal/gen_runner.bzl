@@ -19,35 +19,17 @@ be used as an executable."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
-load(":plugin.bzl", "PostcssPluginInfo")
-
-ERROR_INPUT_NO_PLUGINS = "No plugins were provided"
 
 def _postcss_runner_src_impl(ctx):
-    if len(ctx.attr.plugins.items()) == 0:
-        fail(ERROR_INPUT_NO_PLUGINS)
-
-    plugins = []
-    for plugin_key, plugin_options in ctx.attr.plugins.items():
-        node_require = plugin_key[PostcssPluginInfo].node_require
-        plugins.append("'%s': %s" %
-                       (node_require, plugin_options if plugin_options else "[]"))
-
     ctx.actions.expand_template(
         template = ctx.file.template,
         output = ctx.outputs.postcss_runner_src,
-        substitutions = {
-            # Map of PostCSS plugin requires => arrays of args to the plugins.
-            "TEMPLATED_plugins": "{%s}" % (",".join(plugins)) if plugins else "",
-        },
+        substitutions = {},
     )
 
 postcss_runner_src = rule(
     implementation = _postcss_runner_src_impl,
     attrs = {
-        "plugins": attr.label_keyed_string_dict(
-            mandatory = True,
-        ),
         "template": attr.label(
             allow_single_file = [".js"],
             mandatory = True,
@@ -60,7 +42,6 @@ postcss_runner_src = rule(
 
 def postcss_gen_runner(
         name,
-        plugins,
         deps,
         **kwargs):
     """Generates a PostCSS runner binary.
@@ -69,9 +50,6 @@ def postcss_gen_runner(
 
     Args:
         name: The name of the build rule.
-        plugins: A map of plugin Node.js require paths (following the
-            requirements of rules_nodejs), with values being config objects
-            for each respective plugin.
         deps: A list of NodeJS modules the config depends on. The postcss module
             is included by default.
         **kwargs: Standard BUILD arguments to pass.
@@ -81,7 +59,6 @@ def postcss_gen_runner(
 
     postcss_runner_src(
         name = runner_src_name,
-        plugins = plugins,
         template = "@build_bazel_rules_postcss//internal:runner-template.js",
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
