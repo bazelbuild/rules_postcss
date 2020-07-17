@@ -30,15 +30,15 @@ def _postcss_runner_src_impl(ctx):
     plugins = []
     for plugin_key, plugin_options in ctx.attr.plugins.items():
         node_require = plugin_key[PostcssPluginInfo].node_require
-        plugins.append("require('%s').apply(this, %s)" %
+        plugins.append("'%s': %s" %
                        (node_require, plugin_options if plugin_options else "[]"))
 
     ctx.actions.expand_template(
         template = ctx.file.template,
         output = ctx.outputs.postcss_runner_src,
         substitutions = {
-            # The array of PostCSS plugin objects.
-            "TEMPLATED_plugins": "[%s]" % (",".join(plugins)) if plugins else "",
+            # Map of PostCSS plugin requires => arrays of args to the plugins.
+            "TEMPLATED_plugins": "{%s}" % (",".join(plugins)) if plugins else "",
             # Lowercase Python boolean converts to true/false.
             "TEMPLATED_sourcemap": str(ctx.attr.sourcemap).lower(),
         },
