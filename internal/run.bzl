@@ -18,7 +18,6 @@ Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 
 load("@build_bazel_rules_nodejs//:providers.bzl", "run_node")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:shell.bzl", "shell")
 load(":plugin.bzl", "PostcssPluginInfo")
 
 ERROR_INPUT_NO_PLUGINS = "No plugins were provided"

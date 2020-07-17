@@ -20,7 +20,7 @@ it using a provided list of PostCSS plugins, against input .css (and optionally
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load(":gen_runner.bzl", "postcss_gen_runner")
+load(":runner_bin.bzl", "postcss_runner_bin")
 load(":run.bzl", "postcss_run")
 
 def postcss_binary(
@@ -85,10 +85,14 @@ def postcss_binary(
 
     runner_name = "%s.postcss_runner" % name
 
-    postcss_gen_runner(
+    postcss_runner_bin(
         name = runner_name,
-        deps = deps + plugins.keys(),
-        **dicts.add({"visibility": ["//visibility:private"]})
+        src = "@build_bazel_rules_postcss//internal:runner-template.js",
+        deps = [
+            "@npm//minimist",
+            "@npm//postcss",
+        ] + plugins.keys(),
+        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 
     postcss_run(

@@ -19,7 +19,7 @@ declares a separate action for each of them.
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load(":gen_runner.bzl", "postcss_gen_runner")
+load(":runner_bin.bzl", "postcss_runner_bin")
 load(":run.bzl", "postcss_multi_run")
 
 def postcss_multi_binary(
@@ -66,9 +66,13 @@ def postcss_multi_binary(
 
     runner_name = "%s.postcss_runner" % name
 
-    postcss_gen_runner(
+    postcss_runner_bin(
         name = runner_name,
-        deps = deps + list(plugins.keys()),
+        src = "@build_bazel_rules_postcss//internal:runner-template.js",
+        deps = [
+            "@npm//minimist",
+            "@npm//postcss",
+        ] + list(plugins.keys()),
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 

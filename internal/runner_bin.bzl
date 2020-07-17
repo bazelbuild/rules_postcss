@@ -36,7 +36,7 @@ def postcss_runner_bin(
 
     nodejs_binary(
         name = name,
-        entry_point = ":%s" % (src),
+        entry_point = src,
         data = deps,
         **kwargs
     )
