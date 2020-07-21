@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:defs.bzl", "postcss_binary", "postcss_plugin")
+load("//:index.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
 

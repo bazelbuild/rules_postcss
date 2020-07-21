@@ -36,18 +36,18 @@ def rules_postcss_dependencies():
     _include_if_not_defined(
         http_archive,
         name = "build_bazel_rules_nodejs",
-        sha256 = "e1a0d6eb40ec89f61a13a028e7113aa3630247253bcb1406281b627e44395145",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/1.0.1/rules_nodejs-1.0.1.tar.gz"],
+        sha256 = "5bf77cc2d13ddf9124f4c1453dd96063774d755d4fc75d922471540d1c9a8ea8",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.0/rules_nodejs-2.0.0.tar.gz"],
     )
 
     # Sass rules.
     _include_if_not_defined(
         http_archive,
         name = "io_bazel_rules_sass",
-        sha256 = "617e444f47a1f3e25eb1b6f8e88a2451d54a2afdc7c50518861d9f706fc8baaa",
+        sha256 = "9dcfba04e4af896626f4760d866f895ea4291bc30bf7287887cefcf4707b6a62",
         urls = [
-            "https://github.com/bazelbuild/rules_sass/archive/1.23.7.zip",
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/1.23.7.zip",
+            "https://github.com/bazelbuild/rules_sass/archive/1.26.3.zip",
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/1.26.3.zip",
         ],
-        strip_prefix = "rules_sass-1.23.7",
+        strip_prefix = "rules_sass-1.26.3",
     )

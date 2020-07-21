@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:defs.bzl", "autoprefixer")
+load("//:index.bzl", "autoprefixer")
 
 package(default_visibility = ["//tests:__subpackages__"])
 

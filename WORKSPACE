@@ -19,10 +19,6 @@ yarn_install(
     yarn_lock = "//:yarn.lock",
 )
 
-load("@npm//:install_bazel_dependencies.bzl", "install_bazel_dependencies")
-
-install_bazel_dependencies()
-
 load("//:repositories.bzl", "postcss_repositories")
 
 postcss_repositories()

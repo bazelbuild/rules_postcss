@@ -13,7 +13,7 @@
 # limitations under the License.
 
 load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
-load("//:defs.bzl", "autoprefixer")
+load("//:index.bzl", "autoprefixer")
 
 package(default_visibility = ["//tests:__subpackages__"])
 

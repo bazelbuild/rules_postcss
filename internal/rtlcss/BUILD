@@ -15,6 +15,12 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@build_bazel_rules_postcss//internal:plugin.bzl", "postcss_plugin")
 
+filegroup(
+    name = "package_contents",
+    srcs = glob(["*"]),
+    visibility = ["//:__pkg__"],
+)
+
 bzl_library(
     name = "build_defs",
     srcs = glob(["*.bzl"]),
