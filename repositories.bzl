@@ -17,7 +17,6 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "check_rules_nodejs_version")
 load("@io_bazel_rules_sass//:defs.bzl", "sass_repositories")
 load("@io_bazel_rules_sass//:package.bzl", "rules_sass_dependencies")
-load("@npm//@bazel/typescript:index.bzl", "ts_setup_workspace")
 
 def postcss_repositories():
     """Set up environment for PostCSS."""
@@ -27,5 +26,3 @@ def postcss_repositories():
     rules_sass_dependencies()
 
     sass_repositories()
-
-    ts_setup_workspace()
