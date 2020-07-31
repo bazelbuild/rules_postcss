@@ -1,19 +1,25 @@
 ---
 buildifier:
   version: latest
-platforms:
-  ubuntu1604:
+tasks:
+  ubuntu1604_build:
     build_targets:
     - "..."
+  ubuntu1804_build:
+    build_targets:
+    - "..."
+  macos_build:
+    build_targets:
+    - "..."
+  ubuntu1604_test:
+    working_directory: tests
     test_targets:
     - "..."
-  ubuntu1804:
-    build_targets:
-    - "..."
+  ubuntu1804_test:
+    working_directory: tests
     test_targets:
     - "..."
-  macos:
-    build_targets:
-    - "..."
+  macos_test:
+    working_directory: tests
     test_targets:
     - "..."
