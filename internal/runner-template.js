@@ -99,6 +99,14 @@ const pluginInstances = Object.entries(pluginMap).map(
         } catch { }
       }
 
+      // If that still fails, throw an error.
+      if (!plugin) {
+        const e = new Error(
+            `could not resolve plugin with node require ${nodeRequire}`);
+        e.code = 'MODULE_NOT_FOUND';
+        throw e;
+      }
+
       return plugin.apply(this, args);
     });
 
