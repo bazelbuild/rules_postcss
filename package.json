@@ -20,13 +20,9 @@
         "autoprefixer": "9.4.3",
         "minimist": "1.2.3",
         "postcss": "^7.0.7",
-        "rtlcss": "^2.4.0",
-        "typescript": "^3.7.2"
+        "rtlcss": "^2.4.0"
     },
     "peerDependencies": {
         "postcss": "^7.0.7"
-    },
-    "devDependencies": {
-        "@bazel/typescript": "^2.0.0"
     }
 }

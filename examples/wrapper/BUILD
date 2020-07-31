@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:index.bzl", "postcss_binary", "postcss_plugin")
+load("@build_bazel_rules_postcss//:index.bzl", "postcss_binary", "postcss_plugin")
 
-package(default_visibility = ["//tests:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 postcss_plugin(
     name = "rtlcss",

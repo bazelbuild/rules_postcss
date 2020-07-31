@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("//:index.bzl", "postcss_multi_binary", "postcss_plugin")
+load("@build_bazel_rules_postcss//:index.bzl", "postcss_multi_binary", "postcss_plugin")
 
-package(default_visibility = ["//tests:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 AUTO_PREFIXER_BROWSERS = "ie >= 9, edge >= 12, firefox >= 42, chrome >= 32, safari >= 8, opera >= 38, ios_saf >= 9.2, android >= 4.3, and_uc >= 9.9"
 

@@ -30,11 +30,6 @@ bzl_library(
 exports_files(["LICENSE"])
 
 # BEGIN-INTERNAL
-exports_files(
-    ["tsconfig.json"],
-    visibility = ["//visibility:public"],
-)
-
 pkg_npm(
     name = "npm_package",
     srcs = [

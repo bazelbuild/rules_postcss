@@ -1,4 +1,4 @@
-# Copyright 2019 The Bazel Authors
+# Copyright 2020 The Bazel Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@build_bazel_rules_postcss//:index.bzl", "postcss_binary", "postcss_plugin")
-
-package(default_visibility = ["//visibility:public"])
-
-postcss_plugin(
-    name = "header",
-    srcs = ["header.js"],
-    node_require = "build_bazel_rules_postcss_examples/data_attr/header.js",
-)
-
-postcss_binary(
-    name = "style_processed",
-    src = "style.css",
-    named_data = {"header": "header.txt"},
-    plugins = {
-        ":header": "[{ path: bazel.data.header[0] }]",
-    },
+exports_files(
+    ["tsconfig.json"],
+    visibility = ["//visibility:public"],
 )
