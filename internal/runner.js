@@ -81,7 +81,7 @@ const outCssPath = path.join(cwd, args.outCssFile);
 const outCssMapPath =
     args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
 
-// We two parallel arrays of PostCSS plugin requires => strings of JS args.
+// We use two parallel arrays of PostCSS plugin requires => strings of JS args.
 // To use in PostCSS, convert these into the actual plugin instances.
 const pluginRequires = argAsArray('pluginRequires');
 const pluginArgs = argAsArray('pluginArgs');
