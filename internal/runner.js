@@ -64,7 +64,7 @@ const options = {
   from: args.cssFile,
   // The path of the output CSS file.
   to: args.outCssFile,
-  map: TEMPLATED_sourcemap
+  map: args.sourcemap
       ? {
           // Don't output the source map inline, we want it as a separate file.
           inline: false,
@@ -81,11 +81,12 @@ const outCssPath = path.join(cwd, args.outCssFile);
 const outCssMapPath =
     args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
 
-// We receive a map of PostCSS plugin requires => array of args to the plugins.
-// To use in PostCSS, convert this map into the actual plugin instances.
-const pluginMap = TEMPLATED_plugins;
-const pluginInstances = Object.entries(pluginMap).map(
-    ([nodeRequire, args]) => {
+// We use two parallel arrays of PostCSS plugin requires => strings of JS args.
+// To use in PostCSS, convert these into the actual plugin instances.
+const pluginRequires = argAsArray('pluginRequires');
+const pluginArgs = argAsArray('pluginArgs');
+const pluginInstances = pluginRequires.map(
+    (nodeRequire, i) => {
       // Try and resolve this plugin as a module identifier.
       let plugin;
       try {
@@ -107,7 +108,7 @@ const pluginInstances = Object.entries(pluginMap).map(
         throw e;
       }
 
-      return plugin.apply(this, args);
+      return plugin.apply(this, eval(pluginArgs[i]));
     });
 
 postcss(pluginInstances)
@@ -115,7 +116,7 @@ postcss(pluginInstances)
     .then(
         result => {
           fs.writeFileSync(outCssPath, result.css);
-          if (TEMPLATED_sourcemap && result.map) {
+          if (args.sourcemap && result.map) {
             fs.writeFileSync(outCssMapPath, result.map);
           }
         },

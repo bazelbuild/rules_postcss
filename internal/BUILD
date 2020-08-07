@@ -26,4 +26,4 @@ bzl_library(
     visibility = ["//:__subpackages__"],
 )
 
-exports_files(["runner-template.js"])
+exports_files(["runner.js"])
