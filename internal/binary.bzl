@@ -87,11 +87,7 @@ def postcss_binary(
 
     postcss_runner_bin(
         name = runner_name,
-        src = "@build_bazel_rules_postcss//internal:runner.js",
-        deps = [
-            "@npm//minimist",
-            "@npm//postcss",
-        ] + deps + plugins.keys(),
+        deps = deps + plugins.keys(),
         **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
     )
 

@@ -14,29 +14,29 @@
 
 """PostCSS runner binary rule.
 
-Creates a nodejs_binary given our generated internal runner source. This file
-can be substituted in your copies of these build rules, for example due to
-differences in Node.js/Starlark build rules."""
+Sets up common deps and entry point for the PostCSS runner."""
 
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 
 def postcss_runner_bin(
         name,
-        src,
         deps,
         **kwargs):
-    """Convenience helper for using nodejs_binary with the PostCSS runner.
+    """Sets up a nodejs_binary for the PostCSS runner with common deps.
 
     Args:
         name: The name of the build rule.
-        src: The source file and entry point of the nodejs_binary.
-        deps: What the nodejs_binary depends on.
+        deps: Additional NodeJS modules the runner will depend on. The PostCSS
+            module is always implicitly included.
         **kwargs: Additional arguments to pass to nodejs_binary().
     """
 
     nodejs_binary(
         name = name,
-        entry_point = src,
-        data = deps,
+        entry_point = "@build_bazel_rules_postcss//internal:runner.js",
+        data = [
+            "@npm//minimist",
+            "@npm//postcss",
+        ] + deps,
         **kwargs
     )
