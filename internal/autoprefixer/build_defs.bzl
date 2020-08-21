@@ -38,7 +38,7 @@ def autoprefixer(
     postcss_binary(
         name = name,
         plugins = {
-            "@build_bazel_rules_postcss//internal/autoprefixer:autoprefixer": "[{ browsers: '%s' }]" % (browsers),
+            "@build_bazel_rules_postcss//internal/autoprefixer": "[{ browsers: '%s' }]" % (browsers),
         },
         src = src,
         output_name = out,

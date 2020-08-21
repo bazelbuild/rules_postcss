@@ -33,7 +33,7 @@ def rtlcss(
     postcss_binary(
         name = name,
         plugins = {
-            "@build_bazel_rules_postcss//internal/rtlcss:rtlcss": "",
+            "@build_bazel_rules_postcss//internal/rtlcss": "",
         },
         src = src,
         output_name = out,
