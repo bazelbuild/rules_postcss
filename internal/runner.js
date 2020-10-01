@@ -50,9 +50,9 @@ function compile(rawArgs) {
     const [name, value] = pair.split(':');
     (data[name] = data[name] || []).push(value);
   }
-
-  // These variables are documented in `postcss_binary`'s docstring and are fair
-  // game for plugin configuration to read.
+  
+  // These variables are documented in `postcss_binary`'s docstring and are
+  // fair game for plugin configuration to read.
   const bazel = {
     binDir: args.binDir,
     data: data,
@@ -68,11 +68,11 @@ function compile(rawArgs) {
     to: args.outCssFile,
     map: args.sourcemap
         ? {
-            // Don't output the source map inline, we want it as a separate file.
+            // Don't output source map inline, we want it as a separate file.
             inline: false,
             // Whether to add (or modify, if already existing) the
-            // sourceMappingURL comment in the output .css to point to the output
-            // .css.map.
+            // sourceMappingURL comment in the output .css to point to the
+            // output .css.map.
             annotation: true,
           }
         : false,
@@ -82,8 +82,8 @@ function compile(rawArgs) {
   const outCssPath = path.join(cwd, args.outCssFile);
   const outCssMapPath =
       args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
-
-  // We use two parallel arrays of PostCSS plugin requires => strings of JS args.
+  
+  // We use two parallel arrays, PostCSS plugin requires => strings of JS args.
   // To use in PostCSS, convert these into the actual plugin instances.
   const pluginRequires = argAsArray(args, 'pluginRequires');
   const pluginArgs = argAsArray(args, 'pluginArgs');
