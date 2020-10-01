@@ -34,26 +34,28 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
         fail(ERROR_INPUT_NO_PLUGINS)
 
     # Generate the command line.
-    args = [
-        "--binDir=%s" % ctx.bin_dir.path,
-        "--cssFile=%s" % input_css.path,
-        "--outCssFile=%s" % output_css.path,
-    ]
+    args = ctx.actions.args()
+    if ctx.executable.wrapper:
+        args.add(ctx.executable.runner.path)
+    args.add("--binDir", ctx.bin_dir.path)
+    args.add("--cssFile", input_css.path)
+    args.add("--outCssFile", output_css.path)
 
     data = [t.files for t in ctx.attr.data] + [t.files for t in ctx.attr.named_data.keys()]
     for files in data:
-        args.extend(["--data=" + f.path for f in files.to_list()])
+        args.add_all("--data", files.to_list())
 
     for (target, name) in ctx.attr.named_data.items():
-        args.extend(["--namedData=%s:%s" % (name, f.path) for f in target.files.to_list()])
+        for file in target.files.to_list():
+            args.add("--namedData", "%s:%s" % (name, file.path))
 
     if hasattr(ctx.outputs, "additional_outputs"):
-        args.extend(["--additionalOutputs=" + f.path for f in ctx.outputs.additional_outputs])
+        args.add_all("--additionalOutputs", ctx.outputs.additional_outputs)
 
     if input_map:
-        args.append("--cssMapFile=%s" % input_map.path)
+        args.add("--cssMapFile", input_map.path)
     if ctx.attr.sourcemap:
-        args.append("--outCssMapFile=%s" % output_map.path)
+        args.add("--outCssMapFile", output_map.path)
 
     # The command may only access files declared in inputs.
     inputs = depset(
@@ -63,7 +65,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
 
     outputs = [output_css]
     if ctx.attr.sourcemap:
-        args.append("--sourcemap")
+        args.add("--sourcemap")
         outputs.append(output_map)
 
     if hasattr(ctx.outputs, "additional_outputs"):
@@ -72,10 +74,8 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     plugins = []
     for plugin_key, plugin_options in ctx.attr.plugins.items():
         node_require = plugin_key[PostcssPluginInfo].node_require
-        args.append("--pluginRequires")
-        args.append(node_require)
-        args.append("--pluginArgs")
-        args.append(plugin_options if plugin_options else "[]")
+        args.add("--pluginRequires", node_require)
+        args.add("--pluginArgs", plugin_options if plugin_options else "[]")
 
     # If a wrapper binary is passed, run it. It gets the actual binary as an
     # input and the path to it as the first arg.
@@ -85,7 +85,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             outputs = outputs,
             executable = ctx.executable.wrapper,
             tools = [ctx.executable.runner],
-            arguments = [ctx.executable.runner.path] + args,
+            arguments = [args],
             progress_message = "Running PostCSS wrapper on %s" % input_css,
         )
     else:
@@ -95,7 +95,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             outputs = outputs,
             executable = "runner",
             tools = [],
-            arguments = args,
+            arguments = [args],
             progress_message = "Running PostCSS runner on %s" % input_css,
         )
 
