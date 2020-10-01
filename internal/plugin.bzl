@@ -21,7 +21,8 @@ postcss_binary targets.
 
 load("@build_bazel_rules_nodejs//:providers.bzl", "NpmPackageInfo")
 
-PostcssPluginInfo = provider(fields = ["node_require"])
+PostcssPluginInfo = provider("""Provides extra metadata about this PostCSS
+plugin required when using postcss_binary.""", fields = ["node_require"])
 
 def _postcss_plugin_info_impl(ctx):
     return [
