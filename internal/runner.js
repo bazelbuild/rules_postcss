@@ -112,7 +112,7 @@ function compile(rawArgs) {
 
         return plugin.apply(this, eval(pluginArgs[i]));
       });
-
+  
   return postcss(pluginInstances)
       .process(cssString, options)
       .then(
@@ -124,17 +124,33 @@ function compile(rawArgs) {
             return true;
           },
           e => {
-            console.warn('Error in processing. Args:', args);
-            console.warn('Error:', e);
+            worker.log('Error in processing. Args:', args);
+            worker.log('Error:', e);
             return false;
           });
 }
 
-const args = process.argv.slice(2);
-compile(args).then(
-    success => {
-      // Arbitrary exit code for failure, otherwise we exit succesfully.
-      if (!success) {
-        process.exit(2);
-      }
-    });
+if (worker.runAsWorker(process.argv)) {
+  worker.log('PostCSS runner starting as worker...');
+  worker.runWorkerLoop(compile);
+} else {
+  console.log('PostCSS runner starting standalone...');
+
+  // If the first param starts with @, this is a Bazel param file. Otherwise,
+  // treat the params as coming directly from argv.
+  let args;
+  if (process.argv[2].startsWith('@')) {
+    const paramFile = process.argv[2].replace(/^@/, '');
+    args = fs.readFileSync(paramFile, 'utf-8').trim().split('\n');
+  } else {
+    args = process.argv.slice(2);
+  }
+
+  compile(args).then(
+      success => {
+        // Arbitrary exit code for failure, otherwise we exit succesfully.
+        if (!success) {
+          process.exit(2);
+        }
+      });
+}

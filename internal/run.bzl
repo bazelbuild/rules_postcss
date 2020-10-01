@@ -89,6 +89,10 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             progress_message = "Running PostCSS wrapper on %s" % input_css,
         )
     else:
+        # flagfile is easy to do directly, need to figure out how to do this
+        # cleanly for wrappers though
+        args.use_param_file("@%s", use_always = True)
+        args.set_param_file_format("multiline")
         run_node(
             ctx = ctx,
             inputs = inputs,
