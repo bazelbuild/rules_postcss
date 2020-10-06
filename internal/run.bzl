@@ -168,7 +168,10 @@ _postcss_run = rule(
         "sourcemap": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
         "named_data": attr.label_keyed_string_dict(allow_files = True),
-        "plugins": attr.label_keyed_string_dict(mandatory = True),
+        "plugins": attr.label_keyed_string_dict(
+            cfg = "exec",
+            mandatory = True,
+        ),
         "runner": attr.label(
             executable = True,
             cfg = "host",
@@ -243,6 +246,7 @@ _postcss_multi_run = rule(
         "data": attr.label_list(allow_files = True),
         "named_data": attr.label_keyed_string_dict(allow_files = True),
         "plugins": attr.label_keyed_string_dict(
+            cfg = "exec",
             mandatory = True,
         ),
         "runner": attr.label(
