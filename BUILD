@@ -15,6 +15,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 # BEGIN-INTERNAL
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
+load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
 # END-INTERNAL
 
 bzl_library(
@@ -30,6 +31,14 @@ bzl_library(
 exports_files(["LICENSE"])
 
 # BEGIN-INTERNAL
+stardoc(
+    name = "docs",
+    input = "index.bzl",
+    out = "doc.md",
+    deps = ["//:build_defs"],
+    symbol_names = ["postcss_binary", "postcss_multi_binary", "postcss_plugin"],
+)
+
 exports_files(
     ["tsconfig.json"],
     visibility = ["//visibility:public"],

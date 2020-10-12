@@ -1,0 +1,191 @@
+diff --git BUILD.bazel BUILD.bazel
+index efda7cf..3a51205 100755
+--- BUILD.bazel
++++ BUILD.bazel
+@@ -12,9 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "COMMON_REPLACEMENTS", "pkg_npm")
+ # defaults.bzl not included in distribution
+ # load("//:tools/defaults.bzl", "codeowners", "pkg_tar")
+@@ -43,6 +41,7 @@ bzl_library(
+         "//internal/common:bzl",
+         "//internal/generated_file_test:bzl",
+         "//internal/linker:bzl",
++        "//internal/node:bzl",
+         "//internal/pkg_npm:bzl",
+         "//internal/pkg_web:bzl",
+         "//internal/providers:bzl",
+diff --git internal/bazel_integration_test/BUILD.bazel internal/bazel_integration_test/BUILD.bazel
+index eab3886..bbc085e 100755
+--- internal/bazel_integration_test/BUILD.bazel
++++ internal/bazel_integration_test/BUILD.bazel
+@@ -12,9 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+ 
+ package(default_visibility = ["//visibility:public"])
+diff --git internal/common/BUILD.bazel internal/common/BUILD.bazel
+index f0412d4..da34750 100755
+--- internal/common/BUILD.bazel
++++ internal/common/BUILD.bazel
+@@ -12,9 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load(":check_version_test.bzl", "check_version_test_suite")
+ 
+ licenses(["notice"])  # Apache 2.0
+diff --git internal/generated_file_test/BUILD internal/generated_file_test/BUILD
+index 3e753a7..2d4b2ef 100755
+--- internal/generated_file_test/BUILD
++++ internal/generated_file_test/BUILD
+@@ -1 +1,9 @@
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
++
++bzl_library(
++    name = "bzl",
++    srcs = glob(["*.bzl"]),
++    visibility = ["//visibility:public"],
++)
++
+ exports_files(["bundle.js"])
+\ No newline at end of file
+diff --git internal/js_library/BUILD.bazel internal/js_library/BUILD.bazel
+index 054a5f3..6f29827 100755
+--- internal/js_library/BUILD.bazel
++++ internal/js_library/BUILD.bazel
+@@ -1,6 +1,4 @@
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ 
+ bzl_library(
+     name = "bzl",
+diff --git internal/linker/BUILD.bazel internal/linker/BUILD.bazel
+index 40140a2..7531995 100755
+--- internal/linker/BUILD.bazel
++++ internal/linker/BUILD.bazel
+@@ -1,4 +1,12 @@
+ 
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
++
++bzl_library(
++    name = "bzl",
++    srcs = glob(["*.bzl"]),
++    visibility = ["//visibility:public"],
++)
++
+ exports_files([
+     "index.js",
+     "runfiles_helper.js",
+diff --git internal/node/BUILD.bazel internal/node/BUILD.bazel
+index 09cf2b4..f739ff9 100755
+--- internal/node/BUILD.bazel
++++ internal/node/BUILD.bazel
+@@ -12,9 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
+ 
+ package(default_visibility = ["//visibility:public"])
+diff --git internal/npm_install/BUILD.bazel internal/npm_install/BUILD.bazel
+index 6fd3f08..d2b7b8f 100755
+--- internal/npm_install/BUILD.bazel
++++ internal/npm_install/BUILD.bazel
+@@ -1,6 +1,4 @@
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+ 
+ 
+diff --git internal/pkg_npm/BUILD.bazel internal/pkg_npm/BUILD.bazel
+index 486ea55..ea0addb 100755
+--- internal/pkg_npm/BUILD.bazel
++++ internal/pkg_npm/BUILD.bazel
+@@ -1,6 +1,4 @@
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+ 
+ package(default_visibility = ["//visibility:public"])
+diff --git internal/pkg_web/BUILD.bazel internal/pkg_web/BUILD.bazel
+index 6bb3fa7..3f0bf48 100755
+--- internal/pkg_web/BUILD.bazel
++++ internal/pkg_web/BUILD.bazel
+@@ -1,6 +1,4 @@
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+ 
+ 
+diff --git internal/providers/BUILD.bazel internal/providers/BUILD.bazel
+index ace773c..7125f08 100755
+--- internal/providers/BUILD.bazel
++++ internal/providers/BUILD.bazel
+@@ -12,9 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ 
+ bzl_library(
+     name = "bzl",
+diff --git third_party/github.com/bazelbuild/bazel-skylib/BUILD third_party/github.com/bazelbuild/bazel-skylib/BUILD
+index 10db32d..16b5313 100755
+--- third_party/github.com/bazelbuild/bazel-skylib/BUILD
++++ third_party/github.com/bazelbuild/bazel-skylib/BUILD
+@@ -1,6 +1,4 @@
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ 
+ licenses(["notice"])
+ 
+diff --git toolchains/node/BUILD.bazel toolchains/node/BUILD.bazel
+index 02a0559..0bd7022 100755
+--- toolchains/node/BUILD.bazel
++++ toolchains/node/BUILD.bazel
+@@ -11,9 +11,7 @@
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+-# bazel_skylib mocked out
+-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+-load("@build_bazel_rules_nodejs//:index.bzl", bzl_library = "dummy_bzl_library")
++load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ 
+ package(default_visibility = ["//visibility:private"])
+ 
+-- 
