@@ -28,7 +28,7 @@ AUTOPREFIXER_OUTPUT = """body {
 file_test(
     name = "autoprefixer_test",
     content = AUTOPREFIXER_OUTPUT,
-    file = "//examples/autoprefixer:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//autoprefixer:style_processed.css",
 )
 
 RTLCSS_OUTPUT = """body {
@@ -42,7 +42,7 @@ RTLCSS_OUTPUT = """body {
 file_test(
     name = "rtlcss_test",
     content = RTLCSS_OUTPUT,
-    file = "//examples/rtlcss:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//rtlcss:style_processed.css",
 )
 
 CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: $(sidebar.width)) {
@@ -56,13 +56,13 @@ CUSTOM_PLUGIN_OUTPUT = """@media screen and (max-width: $(sidebar.width)) {
 file_test(
     name = "custom_plugin_test",
     content = CUSTOM_PLUGIN_OUTPUT,
-    file = "//examples/custom_plugin:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//custom_plugin:style_processed.css",
 )
 
 file_test(
     name = "custom_plugin_ts_test",
     content = CUSTOM_PLUGIN_OUTPUT,
-    file = "//examples/custom_plugin_ts:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//custom_plugin_ts:style_processed.css",
 )
 
 DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
@@ -77,13 +77,13 @@ DATA_ATTR_OUTPUT = """/* This goes at the beginning of the file. */
 file_test(
     name = "data_attr_test",
     content = DATA_ATTR_OUTPUT,
-    file = "//examples/data_attr:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//data_attr:style_processed.css",
 )
 
 file_test(
     name = "positional_data_attr_test",
     content = DATA_ATTR_OUTPUT,
-    file = "//examples/positional_data_attr:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//positional_data_attr:style_processed.css",
 )
 
 ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
@@ -96,12 +96,12 @@ ADDITIONAL_OUTPUT = """# Found 4 unique selectors (of 6 total)
 file_test(
     name = "additional_outputs_test",
     content = ADDITIONAL_OUTPUT,
-    file = "//examples/additional_outputs:selectors.md",
+    file = "@build_bazel_rules_postcss_examples//additional_outputs:selectors.md",
 )
 
 file_test(
     name = "sourcemap_css_test",
-    file = "//examples/sourcemap:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//sourcemap:style_processed.css",
     regexp = "/\\*# sourceMappingURL=style_processed\\.css\\.map \\*/",
 )
 
@@ -109,28 +109,28 @@ file_test(
 # file.
 file_test(
     name = "sourcemap_map_test",
-    file = "//examples/sourcemap:style_processed.css.map",
+    file = "@build_bazel_rules_postcss_examples//sourcemap:style_processed.css.map",
     regexp = "style\\.scss",
 )
 
 rule_test(
     name = "multi_binary_test",
     generates = [
-        "styles/examples/multi_binary/style1.css",
-        "styles/examples/multi_binary/style2.css",
+        "build_bazel_rules_postcss_examples/multi_binary/style1.css",
+        "build_bazel_rules_postcss_examples/multi_binary/style2.css",
     ],
-    rule = "//examples/multi_binary:styles",
+    rule = "@build_bazel_rules_postcss_examples//multi_binary:styles",
 )
 
 rule_test(
     name = "multi_sourcemap_test",
     generates = [
-        "styles/examples/multi_sourcemap/style1.css",
-        "styles/examples/multi_sourcemap/style1.css.map",
-        "styles/examples/multi_sourcemap/style2.css",
-        "styles/examples/multi_sourcemap/style2.css.map",
+        "build_bazel_rules_postcss_examples/multi_sourcemap/style1.css",
+        "build_bazel_rules_postcss_examples/multi_sourcemap/style1.css.map",
+        "build_bazel_rules_postcss_examples/multi_sourcemap/style2.css",
+        "build_bazel_rules_postcss_examples/multi_sourcemap/style2.css.map",
     ],
-    rule = "//examples/multi_sourcemap:styles",
+    rule = "@build_bazel_rules_postcss_examples//multi_sourcemap:styles",
 )
 
 WRAPPER_OUTPUT = """body {
@@ -142,5 +142,5 @@ WRAPPER_OUTPUT = """body {
 file_test(
     name = "wrapper_test",
     content = WRAPPER_OUTPUT,
-    file = "//examples/wrapper:style_processed.css",
+    file = "@build_bazel_rules_postcss_examples//wrapper:style_processed.css",
 )

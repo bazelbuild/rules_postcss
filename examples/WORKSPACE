@@ -1,0 +1,10 @@
+workspace(
+    name = "build_bazel_rules_postcss_examples",
+    managed_directories = {"@npm": ["node_modules"]},
+)
+
+load("@build_bazel_rules_postcss_examples//:package.bzl", "rules_postcss_examples_dependencies")
+rules_postcss_examples_dependencies()
+
+load("@build_bazel_rules_postcss_examples//:repositories.bzl", "postcss_examples_repositories")
+postcss_examples_repositories()
