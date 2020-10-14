@@ -43,7 +43,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
 
     data = [t.files for t in ctx.attr.data] + [t.files for t in ctx.attr.named_data.keys()]
     for files in data:
-        args.add_all("--data", files.to_list())
+        args.add_all("--data", files)
 
     for (target, name) in ctx.attr.named_data.items():
         for file in target.files.to_list():
