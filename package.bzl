@@ -44,7 +44,9 @@ def rules_postcss_dependencies():
     _include_if_not_defined(
         http_archive,
         name = "build_bazel_rules_nodejs",
-        # Un-dummy-ify skylib loading so we can dep on bzl_library targets.
+        # Un-dummy-ify skylib loading so that we can dep on bzl_library targets
+        # from rules_nodejs (i.e. those for nodejs_binary). Having correct deps
+        # in bzl_library is required for skydoc to function.
         patches = ["@build_bazel_rules_postcss//:rules_nodejs_skylib.patch"],
         sha256 = "5bf77cc2d13ddf9124f4c1453dd96063774d755d4fc75d922471540d1c9a8ea8",
         urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.0/rules_nodejs-2.0.0.tar.gz"],
