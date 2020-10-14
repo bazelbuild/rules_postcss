@@ -29,7 +29,9 @@ $executable $@
 echo "finished running wrapped executable"
 
 while [ $# -gt 0 ]; do
-    if case $1 in "--outCssFile="*) true;; *) false;; esac; then
+    if case $1 in "--outCssFile"*) true;; *) false;; esac; then
+        # Take the argv after the flag --outCssFile
+        shift
         outCssFile=$(printf '%s' "$1" | sed 's/--outCssFile=//')
     fi
     shift
