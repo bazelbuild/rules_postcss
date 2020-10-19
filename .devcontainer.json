@@ -1,10 +1,13 @@
 {
     "name": "rules_postcss",
-    "image": "gcr.io/google_appengine/nodejs",
+    "image": "launcher.gcr.io/google/nodejs",
     "settings": { 
         "terminal.integrated.shell.linux": "/bin/bash"
     },
     "extensions": ["bazelbuild.vscode-bazel"],
-    // Use Bazelisk to fetch Bazel specified in .bazelversion, then run rules_nodejs yarn to set up workspace dependencies
+    // Use Bazelisk to fetch Bazel specified in .bazelversion, then run yarn
+    // from rules_nodejs to set up workspace dependencies. This runs in the
+    // background after the source code is mounted, so it's expected you'll see
+    // "Another command (pid=...) is running" if you try Bazel straight away.
     "postCreateCommand": "yarn global add @bazel/bazelisk && bazel run @nodejs//:yarn",
 }
