@@ -1,6 +1,9 @@
 {
     "name": "rules_postcss",
     "image": "gcr.io/google_appengine/nodejs",
+    "settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
     "extensions": ["bazelbuild.vscode-bazel"],
-    "postCreateCommand": "yarn add -D @bazel/bazelisk",
+    "postCreateCommand": "yarn global add @bazel/bazelisk",
 }
