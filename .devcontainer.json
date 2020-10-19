@@ -1,0 +1,6 @@
+{
+    "name": "rules_postcss",
+    "image": "gcr.io/google_appengine/nodejs",
+    "extensions": ["bazelbuild.vscode-bazel"],
+    "postCreateCommand": "yarn add -D @bazel/bazelisk",
+}
