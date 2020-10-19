@@ -1,0 +1,12 @@
+{
+    "name": "rules_postcss",
+    "dockerFile": "Dockerfile",
+    "settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": ["bazelbuild.vscode-bazel"],
+    // Run yarn from rules_nodejs to set up workspace dependencies. This runs
+    // in the background after source code is mounted, so it's expected you'll see
+    // "Another command (pid=...) is running" if you try Bazel straight away.
+    "postCreateCommand": "bazel run @nodejs//:yarn",
+}
