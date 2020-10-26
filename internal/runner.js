@@ -50,7 +50,7 @@ function compile(rawArgs) {
     const [name, value] = pair.split(':');
     (data[name] = data[name] || []).push(value);
   }
-  
+
   // These variables are documented in `postcss_binary`'s docstring and are
   // fair game for plugin configuration to read.
   const bazel = {
@@ -82,7 +82,7 @@ function compile(rawArgs) {
   const outCssPath = path.join(cwd, args.outCssFile);
   const outCssMapPath =
       args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
-  
+
   // We use two parallel arrays, PostCSS plugin requires => strings of JS args.
   // To use in PostCSS, convert these into the actual plugin instances.
   const pluginRequires = argAsArray(args, 'pluginRequires');
@@ -112,7 +112,7 @@ function compile(rawArgs) {
 
         return plugin.apply(this, eval(pluginArgs[i]));
       });
-  
+
   return postcss(pluginInstances)
       .process(cssString, options)
       .then(
