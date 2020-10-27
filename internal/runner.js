@@ -27,6 +27,44 @@ const postcss = require('postcss');
 const runfiles = require(process.env['BAZEL_NODE_RUNFILES_HELPER']);
 const worker = require('@bazel/worker');
 
+const pluginCache = new Map();
+
+/**
+ * Returns a plugin from its module identifier or Bazel workspace path.
+ * 
+ * If not yet required, requires and caches it for fast return later.
+ */
+function requirePlugin(nodeRequire) {
+  // Return early if in cache.
+  if (pluginCache.has(nodeRequire)) {
+    return pluginCache.get(nodeRequire);
+  }
+
+  // Try and resolve this plugin as a module identifier.
+  let plugin;
+  try {
+    plugin = require(nodeRequire);
+  } catch { }
+
+  // If it fails, use the runfile helper in case it's a workspace file.
+  if (!plugin) {
+    try {
+      plugin = require(runfiles.resolve(nodeRequire));
+    } catch { }
+  }
+
+  // If that still fails, throw an error.
+  if (!plugin) {
+    const e = new Error(
+        `could not resolve plugin with node require ${nodeRequire}`);
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+  }
+
+  pluginCache.set(nodeRequire, plugin);
+  return plugin;
+}
+
 /**
  * Returns the argument named `name` as an array.
  *
@@ -89,27 +127,7 @@ function compile(rawArgs) {
   const pluginArgs = argAsArray(args, 'pluginArgs');
   const pluginInstances = pluginRequires.map(
       (nodeRequire, i) => {
-        // Try and resolve this plugin as a module identifier.
-        let plugin;
-        try {
-          plugin = require(nodeRequire);
-        } catch { }
-
-        // If it fails, use the runfile helper in case it's a workspace file.
-        if (!plugin) {
-          try {
-            plugin = require(runfiles.resolve(nodeRequire));
-          } catch { }
-        }
-
-        // If that still fails, throw an error.
-        if (!plugin) {
-          const e = new Error(
-              `could not resolve plugin with node require ${nodeRequire}`);
-          e.code = 'MODULE_NOT_FOUND';
-          throw e;
-        }
-
+        const plugin = requirePlugin(nodeRequire);
         return plugin.apply(this, eval(pluginArgs[i]));
       });
 
