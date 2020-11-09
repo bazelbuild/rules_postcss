@@ -25,6 +25,7 @@ const minimist = require('minimist');
 const path = require('path');
 const postcss = require('postcss');
 const runfiles = require(process.env['BAZEL_NODE_RUNFILES_HELPER']);
+const worker = require('@bazel/worker');
 
 /**
  * Returns the argument named `name` as an array.
@@ -50,8 +51,8 @@ function compile(rawArgs) {
     (data[name] = data[name] || []).push(value);
   }
 
-  // These variables are documented in `postcss_binary`'s docstring and are fair
-  // game for plugin configuration to read.
+  // These variables are documented in `postcss_binary`'s docstring and are
+  // fair game for plugin configuration to read.
   const bazel = {
     binDir: args.binDir,
     data: data,
@@ -67,11 +68,11 @@ function compile(rawArgs) {
     to: args.outCssFile,
     map: args.sourcemap
         ? {
-            // Don't output the source map inline, we want it as a separate file.
+            // Don't output source map inline, we want it as a separate file.
             inline: false,
             // Whether to add (or modify, if already existing) the
-            // sourceMappingURL comment in the output .css to point to the output
-            // .css.map.
+            // sourceMappingURL comment in the output .css to point to the
+            // output .css.map.
             annotation: true,
           }
         : false,
@@ -82,7 +83,7 @@ function compile(rawArgs) {
   const outCssMapPath =
       args.outCssMapFile ? path.join(cwd, args.outCssMapFile) : null;
 
-  // We use two parallel arrays of PostCSS plugin requires => strings of JS args.
+  // We use two parallel arrays, PostCSS plugin requires => strings of JS args.
   // To use in PostCSS, convert these into the actual plugin instances.
   const pluginRequires = argAsArray(args, 'pluginRequires');
   const pluginArgs = argAsArray(args, 'pluginArgs');
@@ -123,17 +124,33 @@ function compile(rawArgs) {
             return true;
           },
           e => {
-            console.warn('Error in processing. Args:', args);
-            console.warn('Error:', e);
+            worker.log('Error in processing. Args:', args);
+            worker.log('Error:', e);
             return false;
           });
 }
 
-const args = process.argv.slice(2);
-compile(args).then(
-    success => {
-      // Arbitrary exit code for failure, otherwise we exit succesfully.
-      if (!success) {
-        process.exit(2);
-      }
-    });
+if (worker.runAsWorker(process.argv)) {
+  worker.log('PostCSS runner starting as worker...');
+  worker.runWorkerLoop(compile);
+} else {
+  console.log('PostCSS runner starting standalone...');
+
+  // If the first param starts with @, this is a Bazel param file. Otherwise,
+  // treat the params as coming directly from argv.
+  let args;
+  if (process.argv[2].startsWith('@')) {
+    const paramFile = process.argv[2].replace(/^@/, '');
+    args = fs.readFileSync(paramFile, 'utf-8').trim().split('\n');
+  } else {
+    args = process.argv.slice(2);
+  }
+
+  compile(args).then(
+      success => {
+        // Arbitrary exit code for failure, otherwise we exit succesfully.
+        if (!success) {
+          process.exit(2);
+        }
+      });
+}

@@ -79,7 +79,8 @@ def postcss_binary(
             accessed through `bazel.data.${name}`.
         wrapper: Wrapper for the postcss binary. If passed, the wrapper is run
             in place of the postcss binary, with an extra first arg pointing
-            to the actual postcss binary.
+            to the actual postcss binary. (Workers are not supported when using
+            a wrapper.)
         **kwargs: Standard BUILD arguments to pass.
     """
 
