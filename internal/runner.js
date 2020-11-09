@@ -90,24 +90,24 @@ function compile(rawArgs) {
   const pluginInstances = pluginRequires.map(
       (nodeRequire, i) => {
         // Try and resolve this plugin as a module identifier.
-        let plugin;	
-        try {	
-          plugin = require(nodeRequire);	
-        } catch { }	
+        let plugin;
+        try {
+          plugin = require(nodeRequire);
+        } catch { }
 
-        // If it fails, use the runfile helper in case it's a workspace file.	
-        if (!plugin) {	
-          try {	
-            plugin = require(runfiles.resolve(nodeRequire));	
-          } catch { }	
-        }	
+        // If it fails, use the runfile helper in case it's a workspace file.
+        if (!plugin) {
+          try {
+            plugin = require(runfiles.resolve(nodeRequire));
+          } catch { }
+        }
 
-        // If that still fails, throw an error.	
-        if (!plugin) {	
-          const e = new Error(	
-              `could not resolve plugin with node require ${nodeRequire}`);	
-          e.code = 'MODULE_NOT_FOUND';	
-          throw e;	
+        // If that still fails, throw an error.
+        if (!plugin) {
+          const e = new Error(
+              `could not resolve plugin with node require ${nodeRequire}`);
+          e.code = 'MODULE_NOT_FOUND';
+          throw e;
         }
 
         return plugin.apply(this, eval(pluginArgs[i]));
