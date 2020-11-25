@@ -23,6 +23,8 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
 load(":run.bzl", "postcss_run")
 
+ERROR_STACK_PLUGIN_CONFLICT = "The `stack` attribute can't be simultaneously used with `plugins` and `deps`."
+
 def postcss_binary(
         name,
         src,
@@ -66,8 +68,7 @@ def postcss_binary(
     """
 
     if stack != None and (len(plugins.keys()) > 0 or len(deps) > 0):
-        fail("The `stack` attribute can't be simultaneously used with `plugins`" +
-             " and `deps`.")
+        fail(ERROR_STACK_PLUGIN_CONFLICT)
 
     # If a stack was provided, it acts as the runner. (Plugins come from a
     # provider created by postcss_stack.)
