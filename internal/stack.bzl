@@ -28,7 +28,7 @@ PostcssPluginsInfo = provider("""Provides a list of plugins.""", fields = ["plug
 
 def _postcss_plugins_info_impl(ctx):
     return [
-        PostcssPluginsInfo(node_require = ctx.attr.node_require),
+        PostcssPluginsInfo(plugins = ctx.attr.plugins),
     ]
 
 postcss_plugins_info = rule(

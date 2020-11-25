@@ -65,7 +65,7 @@ def postcss_binary(
         **kwargs: Standard BUILD arguments to pass.
     """
 
-    if stack != None and (plugins != None or deps != None):
+    if stack != None and (len(plugins.keys()) > 0 or len(deps) > 0):
         fail("The `stack` attribute can't be simultaneously used with `plugins`" +
              " and `deps`.")
 

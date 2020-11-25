@@ -1,0 +1,6 @@
+@media screen and (max-width: 50px) {
+  body {
+    font: unquote("$(blog.title.font.size)") 'Lobster';
+    flex: 50 -50 auto;
+  }
+}
