@@ -19,6 +19,7 @@ Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 load("@build_bazel_rules_nodejs//:providers.bzl", "run_node")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load(":plugin.bzl", "PostcssPluginInfo")
+load(":stack.bzl", "PostcssPluginsInfo")
 
 ERROR_INPUT_NO_PLUGINS = "No plugins were provided"
 ERROR_INPUT_NO_CSS = "Input of one file must be of a .css file"
@@ -71,8 +72,8 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     if hasattr(ctx.outputs, "additional_outputs"):
         outputs.extend(ctx.outputs.additional_outputs)
 
-    plugins = []
-    for plugin_key, plugin_options in ctx.attr.plugins.items():
+    plugins = ctx.attr.plugins or ctx.attr.plugins_info[PostcssPluginsInfo]
+    for plugin_key, plugin_options in plugins.items():
         node_require = plugin_key[PostcssPluginInfo].node_require
         args.add("--pluginRequires", node_require)
         args.add("--pluginArgs", plugin_options if plugin_options else "[]")
@@ -173,9 +174,11 @@ _postcss_run = rule(
         "sourcemap": attr.bool(default = False),
         "data": attr.label_list(allow_files = True),
         "named_data": attr.label_keyed_string_dict(allow_files = True),
+        "plugins_info": attr.label(
+            cfg = "exec",
+        ),
         "plugins": attr.label_keyed_string_dict(
             cfg = "exec",
-            mandatory = True,
         ),
         "runner": attr.label(
             executable = True,
