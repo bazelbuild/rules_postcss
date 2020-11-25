@@ -133,6 +133,57 @@ rule_test(
     rule = "//examples/multi_sourcemap:styles",
 )
 
+STACK_1_OUTPUT = """@media screen and (max-width: 42px) {
+  body {
+    font: $(blog.title.font.size) 'Comic Sans MS';
+    -webkit-box-flex: 42;
+    -webkit-flex: 42 -42 auto;
+        -ms-flex: 42 -42 auto;
+            flex: 42 -42 auto;
+  }
+}
+"""
+
+file_test(
+    name = "stack1_test",
+    content = STACK_1_OUTPUT,
+    file = "//examples/stack:style1_processed.css",
+)
+
+STACK_2_OUTPUT = """@media screen and (max-width: 24px) {
+  body {
+    font: $(blog.title.font.size) 'Papyrus';
+    -webkit-box-flex: 24;
+    -webkit-flex: 24 -24 auto;
+        -ms-flex: 24 -24 auto;
+            flex: 24 -24 auto;
+  }
+}
+"""
+
+file_test(
+    name = "stack2_test",
+    content = STACK_2_OUTPUT,
+    file = "//examples/stack:style2_processed.css",
+)
+
+STACK_3_OUTPUT = """@media screen and (max-width: 50px) {
+  body {
+    font: $(blog.title.font.size) 'Lobster';
+    -webkit-box-flex: 50;
+    -webkit-flex: 50 -50 auto;
+        -ms-flex: 50 -50 auto;
+            flex: 50 -50 auto;
+  }
+}
+"""
+
+file_test(
+    name = "stack3_test",
+    content = STACK_3_OUTPUT,
+    file = "//examples/stack:style3_processed.css",
+)
+
 WRAPPER_OUTPUT = """body {
     padding: 42px 36px 38px 40px;
 }
