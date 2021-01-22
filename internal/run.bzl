@@ -185,6 +185,7 @@ _postcss_run = rule(
         "named_data": attr.label_keyed_string_dict(allow_files = True),
         "plugins_info": attr.label(
             cfg = "exec",
+            providers = [PostcssPluginsInfo],
         ),
         "plugins": attr.label_keyed_string_dict(
             cfg = "exec",
@@ -264,6 +265,7 @@ _postcss_multi_run = rule(
         "named_data": attr.label_keyed_string_dict(allow_files = True),
         "plugins_info": attr.label(
             cfg = "exec",
+            providers = [PostcssPluginsInfo],
         ),
         "plugins": attr.label_keyed_string_dict(
             cfg = "exec",

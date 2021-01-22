@@ -24,7 +24,7 @@ the worker process will be able to cache instantiated PostCSS plugins.
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
 
-PostcssPluginsInfo = provider("""Provides a list of plugins.""", fields = ["plugins"])
+PostcssPluginsInfo = provider("Provides a list of plugins.", fields = ["plugins"])
 
 def _postcss_plugins_info_impl(ctx):
     return [
@@ -48,7 +48,7 @@ postcss_binary.""",
 
 def postcss_stack(
         name,
-        plugins = {},
+        plugins,
         deps = [],
         **kwargs):
     """Runs PostCSS.
@@ -85,17 +85,15 @@ def postcss_stack(
         **kwargs: Standard BUILD arguments to pass.
     """
 
-    # If plugins are provided, create the provider target to be consumed by
-    # postcss_run.
+    # Create the provider target to be consumed by postcss_run.
     stack_plugins_name = "%s.postcss_plugins" % name
-    if plugins != None:
-        postcss_plugins_info(
-            name = stack_plugins_name,
-            plugins = plugins,
-        )
+    postcss_plugins_info(
+        name = stack_plugins_name,
+        plugins = plugins,
+    )
 
     postcss_runner_bin(
         name = name,
         deps = deps + plugins.keys(),
-        **dicts.add(kwargs, {"visibility": ["//visibility:private"]})
+        **kwargs
     )
