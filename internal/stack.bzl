@@ -21,7 +21,6 @@ When postcss_stack is used in conjunction with workers for postcss_binary,
 the worker process will be able to cache instantiated PostCSS plugins.
 """
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(":runner_bin.bzl", "postcss_runner_bin")
 
 PostcssPluginsInfo = provider("Provides a list of plugins.", fields = ["plugins"])
