@@ -124,9 +124,15 @@ function compile(rawArgs) {
             return true;
           },
           e => {
-            worker.log('Error in processing. Args:', args);
-            worker.log('Error:', e);
-            return false;
+            // cssnano (and possibly other packages) can emit errors that aren't
+            // instances of PostCSS's CssSyntaxError class, but that have a
+            // postcssNode field which allows us to construct our own
+            // CssSyntaxError. We do so because its error formatting is more
+            // thorough.
+            if (e.postcssNode) e = e.postcssNode.error(e.message);
+
+            console.warn(e.toString());
+            process.exit(2);
           });
 }
 
