@@ -132,7 +132,7 @@ function compile(rawArgs) {
             if (e.postcssNode) e = e.postcssNode.error(e.message);
 
             console.warn(e.toString());
-            process.exit(2);
+            return false;
           });
 }
 
