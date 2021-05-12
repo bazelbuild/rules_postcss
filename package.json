@@ -19,12 +19,12 @@
         "@types/node": "^12.12.7",
         "autoprefixer": "9.4.3",
         "minimist": "1.2.3",
-        "postcss": "^7.0.7",
+        "postcss": "^8.2.10",
         "rtlcss": "^2.4.0",
         "typescript": "^3.7.2"
     },
     "peerDependencies": {
-        "postcss": "^7.0.7"
+        "postcss": "^8.2.10"
     },
     "devDependencies": {
         "@bazel/typescript": "^2.0.0",
