@@ -100,7 +100,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             tools = [],
             arguments = [args],
             progress_message = "Running PostCSS runner on %s" % input_css,
-            execution_requirements = { "supports-workers": "1" },
+            execution_requirements = {"supports-workers": "1"},
             mnemonic = "PostCSSRunner",
         )
 

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
 # BEGIN-INTERNAL
 load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
@@ -33,10 +34,14 @@ exports_files(["LICENSE"])
 # BEGIN-INTERNAL
 stardoc(
     name = "docs",
-    input = "index.bzl",
     out = "doc.md",
+    input = "index.bzl",
+    symbol_names = [
+        "postcss_binary",
+        "postcss_multi_binary",
+        "postcss_plugin",
+    ],
     deps = ["//:build_defs"],
-    symbol_names = ["postcss_binary", "postcss_multi_binary", "postcss_plugin"],
 )
 
 exports_files(
@@ -48,19 +53,19 @@ pkg_npm(
     name = "npm_package",
     srcs = [
         "BUILD",
-        "index.bzl",
         "LICENSE",
+        "README.md",
+        "index.bzl",
         "package.bzl",
         "package.json",
-        "README.md",
     ],
+    substitutions = {
+        "@build_bazel_rules_postcss//": "@npm//@bazel/postcss/",
+    },
     deps = [
         "//internal:package_contents",
         "//internal/autoprefixer:package_contents",
         "//internal/rtlcss:package_contents",
     ],
-    substitutions = {
-        "@build_bazel_rules_postcss//": "@npm//@bazel/postcss/",
-    },
 )
 # END-INTERNAL

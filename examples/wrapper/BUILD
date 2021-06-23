@@ -32,8 +32,8 @@ sh_binary(
 postcss_binary(
     name = "style_processed",
     src = "style.css",
-    wrapper = ":wrapper",
     plugins = {
         ":rtlcss": "",
     },
+    wrapper = ":wrapper",
 )

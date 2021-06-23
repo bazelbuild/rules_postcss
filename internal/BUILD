@@ -23,12 +23,12 @@ filegroup(
 bzl_library(
     name = "build_defs",
     srcs = glob(["*.bzl"]),
+    visibility = ["//:__subpackages__"],
     deps = [
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
         "@build_bazel_rules_nodejs//:bzl",
     ],
-    visibility = ["//:__subpackages__"],
 )
 
 exports_files(["runner.js"])
