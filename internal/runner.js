@@ -119,7 +119,7 @@ function compile(rawArgs) {
           result => {
             fs.writeFileSync(outCssPath, result.css);
             if (args.sourcemap && result.map) {
-              fs.writeFileSync(outCssMapPath, result.map);
+              fs.writeFileSync(outCssMapPath, result.map.toString());
             }
             return true;
           },
