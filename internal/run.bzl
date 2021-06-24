@@ -87,7 +87,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             executable = ctx.executable.wrapper,
             tools = [ctx.executable.runner],
             arguments = [args],
-            progress_message = "Running PostCSS wrapper on %s" % input_css,
+            progress_message = "Running PostCSS wrapper on %s" % input_css.short_path,
         )
     else:
         args.use_param_file("@%s", use_always = True)
@@ -99,7 +99,7 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
             executable = "runner",
             tools = [],
             arguments = [args],
-            progress_message = "Running PostCSS runner on %s" % input_css,
+            progress_message = "Running PostCSS runner on %s" % input_css.short_path,
             execution_requirements = {"supports-workers": "1"},
             mnemonic = "PostCSSRunner",
         )
