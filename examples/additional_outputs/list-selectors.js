@@ -21,29 +21,32 @@
 
 const fs = require('fs');
 const path = require('path');
-const postcss = require('postcss');
 
 // Outputs a file listing all unique CSS selectors found.
-module.exports = postcss.plugin('list-selectors', (opts = {}) => {
-  return css => {
-    let totalSelectors = 0;
-    const selectorCounts = {};
-    css.walkRules(rule => {
-      for (const selector of rule.selectors) {
-        if (!(selector in selectorCounts)) {
-          selectorCounts[selector] = 0;
+module.exports = (opts = {}) => {
+  return {
+    postcssPlugin: 'list-selectors',
+    Once(css) {
+      let totalSelectors = 0;
+      const selectorCounts = {};
+      css.walkRules(rule => {
+        for (const selector of rule.selectors) {
+          if (!(selector in selectorCounts)) {
+            selectorCounts[selector] = 0;
+          }
+          selectorCounts[selector]++;
+          totalSelectors++;
         }
-        selectorCounts[selector]++;
-        totalSelectors++;
-      }
-    });
+      });
 
-    let markdown = `# Found ${Object.keys(selectorCounts).length} unique selectors`
+      let markdown = `# Found ${Object.keys(selectorCounts).length} unique selectors`
         + ` (of ${totalSelectors} total)\n`;
-    for (let selector in selectorCounts) {
-      markdown += `\n- ${selector} (${selectorCounts[selector]} total)`
-    }
+      for (let selector in selectorCounts) {
+        markdown += `\n- ${selector} (${selectorCounts[selector]} total)`
+      }
 
-    fs.writeFileSync(opts.output, markdown);
-  };
-});
+      fs.writeFileSync(opts.output, markdown);
+    },
+  }
+}
+module.exports.postcss = true;

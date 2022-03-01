@@ -19,24 +19,30 @@ Node.js source files, as well as promoting reuse of plugins across multiple
 postcss_binary targets.
 """
 
-load("@build_bazel_rules_nodejs//:providers.bzl", "NpmPackageInfo")
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "ExternalNpmPackageInfo", "JSModuleInfo")
 
 PostcssPluginInfo = provider("""Provides extra metadata about this PostCSS
 plugin required when using postcss_binary.""", fields = ["node_require"])
 
 def _postcss_plugin_info_impl(ctx):
+    transitive_sources = []
+    for d in ctx.attr.deps:
+        if ExternalNpmPackageInfo in d:
+            transitive_sources.append(d[ExternalNpmPackageInfo].sources)
+        if JSModuleInfo in d:
+            transitive_sources.append(d[JSModuleInfo].sources)
+        if DeclarationInfo in d:
+            transitive_sources.append(d[DeclarationInfo].declarations)
+
     return [
         PostcssPluginInfo(node_require = ctx.attr.node_require),
-        NpmPackageInfo(
+        ExternalNpmPackageInfo(
             direct_sources = depset(ctx.files.srcs),
             sources = depset(
                 ctx.files.srcs,
-                transitive = [
-                    dep[NpmPackageInfo].sources
-                    for dep in ctx.attr.deps
-                    if NpmPackageInfo in dep
-                ],
+                transitive = transitive_sources,
             ),
+            path = "",
             workspace = "npm",
         ),
     ]

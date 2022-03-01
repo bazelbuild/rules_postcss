@@ -19,11 +19,9 @@
  * to stylesheets.
  */
 
-const postcss = require('postcss');
-
 // Replaces all "unquote('hello')" found with "hello", supporting
 // both ' and ". Doesn't do quote escaping.
-module.exports = postcss.plugin('unquote', (opts = {}) => {
+module.exports = (opts = {}) => {
   /**
    * Unquote implementation. http://stackoverflow.com/a/19584742
    * @param {string} str
@@ -36,12 +34,16 @@ module.exports = postcss.plugin('unquote', (opts = {}) => {
     return str;
   };
 
-  return css => {
-    // Handle declaration values in rules.
-    css.walkRules(rule => {
-      rule.walkDecls((decl, i) => decl.value = unquoteStr(decl.value));
-    });
-    // Handle params in @rules.
-    css.walkAtRules(rule => rule.params = unquoteStr(rule.params));
-  };
-});
+  return {
+    postcssPlugin: "unquote",
+    Once(css) {
+      // Handle declaration values in rules.
+      css.walkRules(rule => {
+        rule.walkDecls((decl, i) => decl.value = unquoteStr(decl.value));
+      });
+      // Handle params in @rules.
+      css.walkAtRules(rule => rule.params = unquoteStr(rule.params));
+    },
+  }
+}
+module.exports.postcss = true;

@@ -16,7 +16,7 @@
 
 Runs a internal PostCSS runner, generated via the postcss_gen_runner rule."""
 
-load("@build_bazel_rules_nodejs//:providers.bzl", "run_node")
+load("@build_bazel_rules_nodejs//:providers.bzl", "ExternalNpmPackageInfo", "run_node")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load(":plugin.bzl", "PostcssPluginInfo")
 
@@ -57,12 +57,6 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     if ctx.attr.sourcemap:
         args.add("--outCssMapFile", output_map.path)
 
-    # The command may only access files declared in inputs.
-    inputs = depset(
-        [input_css] + ([input_map] if input_map else []),
-        transitive = data,
-    )
-
     outputs = [output_css]
     if ctx.attr.sourcemap:
         args.add("--sourcemap")
@@ -71,20 +65,28 @@ def _run_one(ctx, input_css, input_map, output_css, output_map):
     if hasattr(ctx.outputs, "additional_outputs"):
         outputs.extend(ctx.outputs.additional_outputs)
 
-    plugins = []
+    plugin_deps = []
     for plugin_key, plugin_options in ctx.attr.plugins.items():
         node_require = plugin_key[PostcssPluginInfo].node_require
         args.add("--pluginRequires", node_require)
         args.add("--pluginArgs", plugin_options if plugin_options else "[]")
+        plugin_deps.append(plugin_key[ExternalNpmPackageInfo].sources)
+
+    # The command may only access files declared in inputs.
+    inputs = depset(
+        [input_css] + ([input_map] if input_map else []),
+        transitive = data + plugin_deps,
+    )
 
     # If a wrapper binary is passed, run it. It gets the actual binary as an
     # input and the path to it as the first arg.
     if ctx.executable.wrapper:
         # If using a wrapper, running as a worker is currently unsupported.
-        ctx.actions.run(
+        run_node(
+            ctx = ctx,
             inputs = inputs,
             outputs = outputs,
-            executable = ctx.executable.wrapper,
+            executable = "wrapper",
             tools = [ctx.executable.runner],
             arguments = [args],
             progress_message = "Running PostCSS wrapper on %s" % input_css.short_path,
