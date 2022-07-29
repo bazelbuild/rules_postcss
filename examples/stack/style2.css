@@ -1,0 +1,6 @@
+@media screen and (max-width: 24px) {
+  body {
+    font: unquote("$(blog.title.font.size)") 'Papyrus';
+    flex: 24 -24 auto;
+  }
+}

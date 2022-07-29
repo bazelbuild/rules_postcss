@@ -14,7 +14,10 @@
 
 load("//:index.bzl", "postcss_binary", "postcss_plugin")
 
-package(default_visibility = ["//tests:__subpackages__"])
+package(default_visibility = [
+    "//examples:__subpackages__",
+    "//tests:__subpackages__",
+])
 
 postcss_plugin(
     name = "unquote",
