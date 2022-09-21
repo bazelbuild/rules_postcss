@@ -22,10 +22,14 @@
 const fs = require('fs');
 const postcss = require('postcss');
 
-module.exports = postcss.plugin('header', (opts = {}) => {
+module.exports = (opts = {}) => {
   const contents = fs.readFileSync(opts.path, 'utf8').trim();
 
-  return css => {
-    css.prepend(postcss.comment({text: contents}));
-  };
-});
+  return {
+    postcssPlugin: "header",
+    Once(css) {
+      css.prepend(postcss.comment({ text: contents }));
+    },
+  }
+}
+module.exports.postcss = true;

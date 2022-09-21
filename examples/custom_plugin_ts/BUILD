@@ -12,30 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
 load("//:index.bzl", "postcss_binary", "postcss_plugin")
 
 package(default_visibility = ["//tests:__subpackages__"])
 
-ts_library(
+ts_project(
     name = "unquote_ts",
-    srcs = ["unquote.ts"],
-    deps = [
-        "@npm//@types",
-        "@npm//postcss",
-    ],
-)
-
-filegroup(
-    name = "unquote_js",
-    srcs = [":unquote_ts"],
-    output_group = "es5_sources",
+    deps = ["@npm//@types"],
 )
 
 postcss_plugin(
     name = "unquote",
     srcs = [
-        ":unquote_js",
+        ":unquote_ts",
     ],
     node_require = "build_bazel_rules_postcss/examples/custom_plugin_ts/unquote.js",
 )

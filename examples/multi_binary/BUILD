@@ -32,6 +32,6 @@ postcss_multi_binary(
     ],
     output_pattern = "{rule}/{dir}/{name}",
     plugins = {
-        ":autoprefixer": "[{ browsers: '%s' }]" % AUTO_PREFIXER_BROWSERS,
+        ":autoprefixer": "[{ overrideBrowserslist: '%s' }]" % AUTO_PREFIXER_BROWSERS,
     },
 )

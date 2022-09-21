@@ -51,6 +51,7 @@ exports_files(
 
 pkg_npm(
     name = "npm_package",
+    package_name = "@bazel/postcss",
     srcs = [
         "BUILD",
         "LICENSE",
