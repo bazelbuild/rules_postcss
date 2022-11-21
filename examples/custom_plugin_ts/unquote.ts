@@ -35,7 +35,7 @@ module.exports = postcss.plugin('unquote', () => {
     }
     return str;
   };
-  
+
   return (css: postcss.Root) => {
     // Handle declaration values in rules.
     css.walkRules(rule => {
